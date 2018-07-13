@@ -1,0 +1,79 @@
+@import '../../../../node_modules/jam-icons/css/jam.min.css';
+
+*,
+.btn,
+.btn.m-btn--custom,
+.form-control{
+	font-family: 'Montserrat', sans-serif;
+}
+
+// Resetting Metronic Defaults
+.m-badge--dot + .m--font-bold{
+	margin-left: 8px;
+}
+.m--font-bold{
+	vertical-align: middle;
+	font-weight: 500;
+}
+.m-aside-menu .m-menu__nav>.m-menu__item>.m-menu__heading .m-menu__ver-arrow, 
+.m-aside-menu .m-menu__nav>.m-menu__item>.m-menu__link .m-menu__ver-arrow{
+	font-size: 1rem;
+}
+.m-aside-menu .m-menu__nav>.m-menu__item>.m-menu__heading .m-menu__link-icon, 
+.m-aside-menu .m-menu__nav>.m-menu__item>.m-menu__link .m-menu__link-icon{
+	font-size: 1.5rem;
+}
+.m-datatable.m-datatable--default>.m-datatable__table>.m-datatable__body .m-datatable__row>.m-datatable__cell, 
+.m-datatable.m-datatable--default>.m-datatable__table>.m-datatable__foot .m-datatable__row>.m-datatable__cell, 
+.m-datatable.m-datatable--default>.m-datatable__table>.m-datatable__head .m-datatable__row>.m-datatable__cell{
+	font-weight: 500;
+}
+.m-datatable.m-datatable--default>.m-datatable__table>.m-datatable__body .m-datatable__row>.m-datatable__cell>span{
+	color: #6f727d;	
+}
+.m-datatable.m-datatable--default>.m-datatable__table>.m-datatable__foot .m-datatable__row>.m-datatable__cell, 
+.m-datatable.m-datatable--default>.m-datatable__table>.m-datatable__head .m-datatable__row>.m-datatable__cell{
+	font-weight: 600;
+}
+.m-datatable__cell .m-link{
+	color: inherit;
+}
+.m-datatable__cell .m-link:hover:after{
+	border-bottom: 1px solid #6f727d;
+    opacity: .3;
+}
+.m-datatable.m-datatable--default>.m-datatable__table>.m-datatable__body .m-datatable__row>.m-datatable__cell.m-datatable__cell--right>span, 
+.m-datatable.m-datatable--default>.m-datatable__table>.m-datatable__foot .m-datatable__row>.m-datatable__cell.m-datatable__cell--right>span, 
+.m-datatable.m-datatable--default>.m-datatable__table>.m-datatable__head .m-datatable__row>.m-datatable__cell.m-datatable__cell--right>span{
+	float: right;
+}
+.m-input-icon.m-input-icon--left .form-control{
+	font-family: 'Montserrat', sans-serif;
+}
+.m-form .col-form-label, 
+.m-form .form-control-label, 
+.m-form .m-form__group>label{
+	font-weight: 500;
+}
+.m-widget13 .m-widget13__item .m-widget13__desc{
+	width: 25%;
+	font-weight: 500;
+	vertical-align: middle;
+	padding-bottom: 10px;
+}
+.m-widget13 .m-widget13__item .m-widget13__text{
+	vertical-align: middle;
+}
+.m-widget13 .m-widget13__item .m-widget13__text.m-widget13__text-bolder{
+	font-size: 1rem;
+}
+.m-widget__avatar{
+	display: block;
+	width: 150px;
+	height: 150px;
+	overflow: hidden;
+}
+.m-widget__avatar img{
+	display: block;
+	width: 100%;
+}
