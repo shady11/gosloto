@@ -8,7 +8,7 @@ use Illuminate\Foundation\Support\Providers\RouteServiceProvider as ServiceProvi
 class RouteServiceProvider extends ServiceProvider
 {
     protected $namespace = 'App\Http\Controllers';
-    protected $bashkaruu = 'App\Http\Controllers\Bashkaruu';
+    protected $admin = 'App\Http\Controllers\Admin';
 
     public function boot()
     {
@@ -18,7 +18,7 @@ class RouteServiceProvider extends ServiceProvider
     {
         $this->mapApiRoutes();
         $this->mapWebRoutes();
-        $this->mapBashkaruuRoutes();
+        $this->mapAdminRoutes();
     }
     protected function mapWebRoutes()
     {
@@ -26,11 +26,11 @@ class RouteServiceProvider extends ServiceProvider
              ->namespace($this->namespace)
              ->group(base_path('routes/web.php'));
     }
-    protected function mapBashkaruuRoutes()
+    protected function mapAdminRoutes()
     {
-        Route::middleware('bashkaruu')
-             ->namespace($this->bashkaruu)
-             ->group(base_path('routes/bashkaruu.php'));
+        Route::middleware('admin')
+             ->namespace($this->admin)
+             ->group(base_path('routes/admin.php'));
     }
     protected function mapApiRoutes()
     {

@@ -37,9 +37,24 @@ class UsersTableSeeder extends Seeder
             'name' => 'Аман',
             'lastname' => 'Эсен',
 
-            'type' => 1,
+            'type' => 2,
 
             'avatar' => 'assets/app/media/img/users/300_3.jpg',
+
+            'active' => true,
+        ]);
+        User::create([
+            'login' => 'test',
+
+            'email' => 'test@gmail.com',
+            'password' => bcrypt('test'),
+
+            'name' => 'Test',
+            'lastname' => 'Test',
+
+            'type' => 3,
+
+            'avatar' => 'assets/app/media/img/users/300_1.jpg',
 
             'active' => true,
         ]);

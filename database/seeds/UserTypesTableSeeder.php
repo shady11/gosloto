@@ -19,5 +19,11 @@ class UserTypesTableSeeder extends Seeder
         UserType::create([
             'name' => 'Администратор',
         ]);
+        UserType::create([
+            'name' => 'Реализатор',
+        ]);
+        UserType::create([
+            'name' => 'Супервайзер',
+        ]);
     }
 }

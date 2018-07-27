@@ -11,4 +11,4 @@ let mix = require('laravel-mix');
  |
  */
 
-mix.sass('resources/assets/sass/bashkaruu/style.scss', 'public/bashkaruu/css');
+mix.sass('resources/assets/sass/admin/style.scss', 'public/admin/css');

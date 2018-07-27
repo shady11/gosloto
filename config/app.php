@@ -152,6 +152,8 @@ return [
          */
         Mcamara\LaravelLocalization\LaravelLocalizationServiceProvider::class,
         Intervention\Image\ImageServiceProvider::class,
+        Laravel\Passport\PassportServiceProvider::class,
+        Rap2hpoutre\LaravelLogViewer\LaravelLogViewerServiceProvider::class,
 
         /*
          * Application Service Providers...
