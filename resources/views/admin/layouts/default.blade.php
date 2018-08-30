@@ -38,6 +38,13 @@
 
 		<link rel="shortcut icon" href="/assets/demo/demo11/media/img/logo/favicon.ico" />
 
+		<style>
+			.m-brand .m-brand__logo .m-brand__logo-wrapper img{
+				height: 40px;
+				width: auto;
+			}
+		</style>
+
 	</head>
 	<!-- end::Head -->
 

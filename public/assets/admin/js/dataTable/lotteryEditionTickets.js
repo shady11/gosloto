@@ -77,6 +77,10 @@ var DatatableRemoteAjaxDemo = {
                     return '<span class="m-badge ' + e[t.active].class + ' m-badge--wide">' + e[t.active].title + "</span>"
                 }
             }, {
+                field: "sold_date",
+                selector: !1,
+                title: "Дата продажи"
+            }, {
                 field: "actions",
                 title: "Actions",
                 sortable: !1,

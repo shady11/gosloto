@@ -43,4 +43,8 @@ class Lottery extends Model
     {
       return $this->hasMany('App\Models\SharedTicket', 'lottery');
     }
+    public function getSoldTickets()
+    {
+      return $this->hasMany('App\Models\SoldTicket', 'lottery');
+    }
 }

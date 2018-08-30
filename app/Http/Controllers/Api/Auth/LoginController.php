@@ -74,4 +74,9 @@ class LoginController extends Controller
 
 		return response()->json([], 204);
     }
+
+    public function test(Request $request)
+    {
+        return 123;
+    }
 }

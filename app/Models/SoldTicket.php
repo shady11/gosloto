@@ -14,4 +14,6 @@ class SoldTicket extends Model
     protected $table = 'sold_tickets';
 
     protected $guarded = ['id'];
+
+    public $timestamps = false;
 }

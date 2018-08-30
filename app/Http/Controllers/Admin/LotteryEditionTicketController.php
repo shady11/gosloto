@@ -29,17 +29,22 @@ class LotteryEditionTicketController extends Controller
         });
 
         if($sort){
-            $resultPaginated = DB::table('lottery_edition_'.$lotteryEdition->number)
+            $resultPaginated = DB::table('lottery_edition_'.$lotteryEdition->lottery_type.'_'.$lotteryEdition->number)
                 ->orderBy($sort['field'], $sort['sort'])
                 ->paginate($perpage);
         } else {
-            $resultPaginated = DB::table('lottery_edition_'.$lotteryEdition->number)
-                ->orderBy('id', 'asc')
+            $resultPaginated = DB::table('lottery_edition_'.$lotteryEdition->lottery_type.'_'.$lotteryEdition->number)
+                ->orderBy('ticket_number', 'asc')
                 ->paginate($perpage);
         }
 
         foreach ($resultPaginated as $row) {
             $row->lottery_edition = $lotteryEdition->number;
+            if($row->sold_date){
+                $row->sold_date = date("d.m.Y H:i", strtotime($row->sold_date));
+            } else {
+                $row->sold_date = '-';
+            }
             $user = User::where('id',$row->user)->first();
             if(!empty($user)){
                 $row->user = $user->getFullName();
@@ -79,7 +84,7 @@ class LotteryEditionTicketController extends Controller
     public function getLotteryTicketsTo(Request $request)
     {
         $lotteryEdition = LotteryEdition::find($request->lotteryEdition);
-        $lotteryEditionTickets = DB::table('lottery_edition_'.$lotteryEdition->number)
+        $lotteryEditionTickets = DB::table('lottery_edition_'.$lotteryEdition->lottery_type.'_'.$lotteryEdition->number)
             ->where('ticket_number', '>', $request->ticketNumber)
             ->where('user', NULL)
             ->get();
@@ -106,22 +111,27 @@ class LotteryEditionTicketController extends Controller
     public function addUser(Request $request, LotteryEdition $lotteryEdition)
     {
         $users = User::where('type', 2)->where('active', true)->pluck('name', 'id')->toArray();
-        $lotteryEditionTickets = DB::table('lottery_edition_'.$lotteryEdition->number)->where('user', NULL)->get();
+        $lotteryEditionTickets = DB::table('lottery_edition_'.$lotteryEdition->lottery_type.'_'.$lotteryEdition->number)->where('user', NULL)->get();
         $step = Setting::where('slug', 'tickets')->first()->getBody()->value;
 
         return view('admin.lotteryEditions.tickets.addUser', compact('lotteryEdition', 'users', 'lotteryEditionTickets', 'step'));
     }
 
-    public function addUserStore(Request $request, LotteryEdition $lotteryEdition)
-    {
+    public function addUserStore(Request $request)
+    {      
+        set_time_limit(4000);
+
+        $lotteryEdition = LotteryEdition::where('number', $request->number)->first();
+        
         $from = $request->lotteryTicketsFrom;
-        $to = $request->lotteryTicketsTo;
+        $to = $request->lotteryTicketsTo - 1;
 
         $user = User::find($request->user);
 
-        $tickets = DB::table('lottery_edition_'.$lotteryEdition->number)->whereBetween('ticket_number', [$from, $to])->get();
+        $tickets = DB::table('lottery_edition_'.$lotteryEdition->lottery_type.'_'.$lotteryEdition->number)->whereBetween('ticket_number', [$from, $to])->get();
+
         foreach ($tickets as $key => $row) {
-            DB::table('lottery_edition_'.$lotteryEdition->number)
+            DB::table('lottery_edition_'.$lotteryEdition->lottery_type.'_'.$lotteryEdition->number)
                 ->where('ticket_number', $row->ticket_number)
                 ->update([
                     'user' => $request->user,

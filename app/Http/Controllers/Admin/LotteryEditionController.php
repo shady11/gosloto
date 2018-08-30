@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Jobs\CreateTickets;
 use App\Models\LotteryEdition;
 use App\Models\LotteryType;
 use Illuminate\Database\Schema\Blueprint;
@@ -87,32 +88,54 @@ class LotteryEditionController extends Controller
     public function store(Request $request)
     {
         set_time_limit(4000);
+        
+        $from = $request->lotteryTicketsFrom;
+        $to = $request->lotteryTicketsTo;
 
-        $lotteryEdition = LotteryEdition::create($request->all());
+        $lotteryEditions = LotteryEdition::all();
 
-        Schema::create('lottery_edition_'.$lotteryEdition->number, function (Blueprint $table) {
-            $table->increments('id');
+        if(!$lotteryEditions->contains('number', $request->number)){
+            $lotteryEdition = LotteryEdition::create($request->except('lotteryTicketsFrom', 'lotteryTicketsTo'));
+        } else {
+            $lotteryEdition = LotteryEdition::where('number', $request->number)->first();
+            $lotteryEdition->tickets_count = $lotteryEdition->tickets_count + $request->tickets_count;
+            $lotteryEdition->save();
+        }        
 
-            $table->string('ticket_number');
+        if(!Schema::hasTable('lottery_edition_'.$lotteryEdition->lottery_type.'_'.$lotteryEdition->number)){
+            Schema::create('lottery_edition_'.$lotteryEdition->lottery_type.'_'.$lotteryEdition->number, function (Blueprint $table) {
+                $table->increments('id');
 
-            $table->unsignedInteger('lottery_edition');
-            $table->unsignedInteger('user')->nullable();
+                $table->string('ticket_number');
 
-            $table->boolean('active')->default(0);
+                $table->unsignedInteger('lottery_edition');
+                $table->unsignedInteger('user')->nullable();
 
-            $table->timestamp('sold_date')->nullable();
-            $table->timestamp('created_at')->useCurrent();
+                $table->boolean('active')->default(0);
 
-            $table->foreign('lottery_edition')->references('id')->on('lottery_editions')->onDelete('cascade');
-            $table->foreign('user')->references('id')->on('users')->onDelete('cascade');
-        });
+                $table->timestamp('sold_date')->nullable();
+                $table->timestamp('created_at')->useCurrent();
 
-        for($i = 0; $i < $lotteryEdition->tickets_count; $i++){
-            DB::table('lottery_edition_'.$lotteryEdition->number)->insert([
-                'ticket_number' => str_pad($i, (strlen($request->tickets_count)-1), "0", STR_PAD_LEFT),
-                'lottery_edition' => $lotteryEdition->id
-            ]);
-        }
+                $table->foreign('lottery_edition')->references('id')->on('lottery_editions')->onDelete('cascade');
+                $table->foreign('user')->references('id')->on('users')->onDelete('cascade');
+            });
+        }       
+
+        if($from && $to){
+            for($i = $from; $i < $to; $i++){
+                DB::table('lottery_edition_'.$lotteryEdition->lottery_type.'_'.$lotteryEdition->number)->insert([
+                    'ticket_number' => str_pad($i, (strlen($request->tickets_count)-1), "0", STR_PAD_LEFT),
+                    'lottery_edition' => $lotteryEdition->id
+                ]);
+            }
+        } else {
+            for($i = 0; $i < $lotteryEdition->tickets_count; $i++){
+                DB::table('lottery_edition_'.$lotteryEdition->lottery_type.'_'.$lotteryEdition->number)->insert([
+                    'ticket_number' => str_pad($i, (strlen($request->tickets_count)-1), "0", STR_PAD_LEFT),
+                    'lottery_edition' => $lotteryEdition->id
+                ]);
+            }
+        }       
 
         return redirect()->route('lotteryEditions.show', $lotteryEdition);
     }
@@ -141,7 +164,7 @@ class LotteryEditionController extends Controller
 
     public function destroy(LotteryEdition $lotteryEdition)
     {
-        Schema::dropIfExists('lottery_edition_'.$lotteryEdition->number);
+        Schema::dropIfExists('lottery_edition_'.$lotteryEdition->lottery_type.'_'.$lotteryEdition->number);
         $lotteryEdition->delete();
         return redirect()->route('lotteryEditions.index');
     }

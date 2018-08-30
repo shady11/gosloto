@@ -19,4 +19,17 @@ Route::post('refresh', 'Api\Auth\LoginController@refresh');
 
 Route::middleware('auth:api')->group(function () {
     Route::post('logout', 'Api\Auth\LoginController@logout');
+
+    Route::get('user', 'Api\UserController@user');
+
+    Route::get('getActiveLotteriesWithEdition', 'Api\LotteryController@getActiveLotteriesWithEdition');
+    Route::get('getActiveLotteries', 'Api\LotteryController@getActiveLotteries');
+    
+    Route::get('getTicketsWithEdition', 'Api\LotteryController@getTicketsWithEdition');
+    Route::post('setTicketWithEdition', 'Api\LotteryController@setTicketWithEdition');
+
+    Route::get('getTickets', 'Api\LotteryController@getTickets');
+    Route::post('setTicket', 'Api\LotteryController@setTicket');
+
+    Route::get('lotteryTypes', 'Api\LotteryTypeController@lotteryTypes');
 });

@@ -20,9 +20,9 @@ class CreateUsersTable extends Migration
             $table->string('avatar')->nullable();
 
             $table->string('name');
-            $table->string('lastname');
+            $table->string('lastname')->nullable();
 
-            $table->unsignedInteger('type');
+            $table->unsignedInteger('type')->nullable();
 
             $table->string('email')->unique();
             $table->string('password', 60)->nullable();
