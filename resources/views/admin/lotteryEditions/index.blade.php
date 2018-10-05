@@ -12,15 +12,17 @@
 			<div class="m-portlet__head-caption">
 				<div class="m-portlet__head-title">
 					<h3 class="m-portlet__head-text">
-						Тиражи лотерей
+						Тиражные лотереи
 					</h3>
 				</div>
 			</div>
-			<div class="m-portlet__head-tools">
-				<a href="{{route('lotteryEditions.create')}}" class="btn btn-info m--margin-left-10">
-					Добавить тираж
-				</a>
-			</div>
+			@if((auth()->user()->isAdmin()) || (auth()->user()->isStock()))
+				<div class="m-portlet__head-tools">
+					<a href="{{route('lottery.lotteryEdition.create')}}" class="btn btn-info m--margin-left-10">
+						Добавить тираж
+					</a>
+				</div>
+			@endif
 		</div>
 		<div class="m-portlet__body">
 			<!--begin: Search Form -->
@@ -53,5 +55,7 @@
 @endsection
 
 @section('footer')
+
 <script src="{{asset('assets/admin/js/dataTable/lotteryEditions.js')}}" type="text/javascript"></script>
+
 @endsection

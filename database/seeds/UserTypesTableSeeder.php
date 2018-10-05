@@ -18,12 +18,27 @@ class UserTypesTableSeeder extends Seeder
         UserType::truncate();
         UserType::create([
             'name' => 'Администратор',
+            'slug' => 'admin',
         ]);
         UserType::create([
             'name' => 'Реализатор',
+            'slug' => 'seller',
         ]);
         UserType::create([
             'name' => 'Супервайзер',
+            'slug' => 'supervisor',
+        ]);
+        UserType::create([
+            'name' => 'Склад',
+            'slug' => 'stock',
+        ]);
+        UserType::create([
+            'name' => 'Отдел кадров',
+            'slug' => 'hr',
+        ]);
+        UserType::create([
+            'name' => 'Касса',
+            'slug' => 'cash',
         ]);
     }
 }

@@ -12,7 +12,11 @@
 			<div class="m-portlet__head-caption">
 				<div class="m-portlet__head-title">
 					<h3 class="m-portlet__head-text">
-						Привязка реализатора
+						@if(auth()->user()->isAdmin() || auth()->user()->isStock())
+							Привязка супервайзера
+						@elseif(auth()->user()->isSupervisor())
+							Привязка реализатора
+						@endif
 					</h3>
 				</div>
 			</div>

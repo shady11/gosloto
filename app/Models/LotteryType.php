@@ -25,4 +25,16 @@ class LotteryType extends Model
    		}
    		return '<span class="m-badge m-badge--'.$class.' m-badge--wide">'.$status.'</span>';
    	}
+
+   	public function hasEdition()
+    {
+        if($this->has_edition){
+            $class = 'success';
+            $status = 'с тиражом';
+        } else {
+            $class = 'metal';
+            $status = 'без тиража';
+        }
+        return '<span class="m-badge m-badge--'.$class.' m-badge--wide">'.$status.'</span>';
+    }
 }

@@ -45,6 +45,12 @@ class SharedTicketController extends Controller
             } else {
                 $row->user = '-';
             }
+            $supervisor = User::where('id',$row->supervisor)->first();
+            if(!empty($supervisor)){
+                $row->supervisor = $supervisor->getFullName();
+            } else {
+                $row->supervisor = '-';
+            }
             $row->shared_user = $row->getSharedUser()->getFullName();
             $row->shared_at = $row->getCreatedDate().' '.$row->getCreatedTime();
             $row->actions = '
@@ -81,13 +87,23 @@ class SharedTicketController extends Controller
     {
         $sharedTicket = new SharedTicket;
         $availableTickets = $lottery->getAvailableTickets();
-        $users = User::where('type', 2)->where('active', true)->pluck('name', 'id')->toArray();
+        if(auth()->user()->isAdmin() || auth()->user()->isStock()){
+            $users = User::where('type', 3)->where('active', true)->pluck('name', 'id')->toArray();
+        } else {
+            $users = User::where('type', 2)->where('active', true)->pluck('name', 'id')->toArray();
+        }
         return view('admin.lotteries.sharedTickets.create', compact('sharedTicket', 'lottery', 'users', 'availableTickets'));
     }
 
     public function store(Request $request, Lottery $lottery)
-    {     
-        $sharedTicket = SharedTicket::create($request->all());
+    {
+        $sharedTicket = SharedTicket::create($request->except('user', 'supervisor'));
+        if(auth()->user()->isAdmin() || auth()->user()->isStock()){
+            $sharedTicket->supervisor = $request->user;
+        } else {
+            $sharedTicket->user = $request->user;
+        }
+        $sharedTicket->save();
         return redirect()->route('lotteries.show', $lottery);
     }
 
@@ -99,13 +115,23 @@ class SharedTicketController extends Controller
     public function edit(Lottery $lottery, SharedTicket $sharedTicket)
     {
         $availableTickets = $lottery->getAvailableTickets();
-        $users = User::where('type', 2)->where('active', true)->pluck('name', 'id')->toArray();
+        if(auth()->user()->isAdmin() || auth()->user()->isStock()){
+            $users = User::where('type', 3)->where('active', true)->pluck('name', 'id')->toArray();
+        } else {
+            $users = User::where('type', 2)->where('active', true)->pluck('name', 'id')->toArray();
+        }
         return view('admin.lotteries.sharedTickets.edit', compact('sharedTicket', 'lottery', 'users', 'availableTickets'));
     }
 
     public function update(Request $request, Lottery $lottery, SharedTicket $sharedTicket)
     {
-        $sharedTicket->update($request->all());
+        $sharedTicket->update($request->except('user'));
+        if(auth()->user()->isAdmin() || auth()->user()->isStock()){
+            $sharedTicket->supervisor = $request->user;
+        } else {
+            $sharedTicket->user = $request->user;
+        }
+        $sharedTicket->save();
         return redirect()->route('lotteries.show', $lottery);
     }
 

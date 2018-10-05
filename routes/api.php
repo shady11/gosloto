@@ -27,6 +27,7 @@ Route::middleware('auth:api')->group(function () {
     
     Route::get('getTicketsWithEdition', 'Api\LotteryController@getTicketsWithEdition');
     Route::post('setTicketWithEdition', 'Api\LotteryController@setTicketWithEdition');
+    Route::post('setTicketsWithEdition', 'Api\LotteryController@setTicketsWithEdition');
 
     Route::get('getTickets', 'Api\LotteryController@getTickets');
     Route::post('setTicket', 'Api\LotteryController@setTicket');

@@ -1,17 +1,28 @@
 <div class="m-portlet__body">
 	<div class="m-form__section m-form__section--first">
+
 		<div class="form-group m-form__group row">
 			{!! Form::label('number', 'Номер тиража:', ['class' => 'col-lg-3 col-form-label']); !!}
 			<div class="col-lg-6">
-				{!! Form::text('number', null, ['id' => 'number', 'class' => 'form-control m-input']) !!}
+				@if($lotteryEdition->id)
+					{!! Form::text('number', null, ['id' => 'number', 'class' => 'form-control m-input', 'disabled']) !!}
+				@else
+					{!! Form::text('number', null, ['id' => 'number', 'class' => 'form-control m-input']) !!}
+				@endif
 			</div>
 		</div>
+
 		<div class="form-group m-form__group row">
 			{!! Form::label('tickets_count', 'Количество билетов:', ['class' => 'col-lg-3 col-form-label']); !!}
 			<div class="col-lg-6">
-				{!! Form::text('tickets_count', null, ['id' => 'tickets_count', 'class' => 'form-control m-input']) !!}
+				@if($lotteryEdition->id)
+					{!! Form::text('tickets_count', null, ['id' => 'tickets_count', 'class' => 'form-control m-input', 'disabled']) !!}
+				@else
+					{!! Form::text('tickets_count', null, ['id' => 'tickets_count', 'class' => 'form-control m-input']) !!}
+				@endif
 			</div>
 		</div>
+
 		<div class="form-group m-form__group row">
 			<label class="col-form-label col-lg-3 col-sm-12">
 				Выбрать билеты:
@@ -23,16 +34,11 @@
 				от
 			</label>
 			<div class="col-lg-4 col-md-9 col-sm-12">
-				{!! Form::text('lotteryTicketsFrom', null, ['id' => 'lotteryTicketsFrom', 'class' => 'form-control m-input']) !!}
-				{{-- <select name="lotteryTicketsFrom" class="form-control m_selectpicker" title="-- выбрать --" id="m_selectpicker_from" onchange="getLotteryTicketsTo(this.value)">
-					@for($i = 0; $i < $lotteryEdition->tickets_count; $i+=$step)
-						@if($lotteryEditionTickets->contains('ticket_number', str_pad($i, (strlen($lotteryEdition->tickets_count)-1), "0", STR_PAD_LEFT)))
-							<option value="{{$i}}" >
-								{{$i}}
-							</option>
-						@endif
-					@endfor
-				</select> --}}
+				@if($lotteryEdition->id)
+					{!! Form::text('lotteryTicketsFrom', null, ['id' => 'lotteryTicketsFrom', 'class' => 'form-control m-input', 'disabled']) !!}
+				@else
+					{!! Form::text('lotteryTicketsFrom', null, ['id' => 'lotteryTicketsFrom', 'class' => 'form-control m-input']) !!}
+				@endif
 			</div>
 		</div>
 
@@ -41,15 +47,11 @@
 				до
 			</label>
 			<div class="col-lg-4 col-md-9 col-sm-12">
-				{!! Form::text('lotteryTicketsTo', null, ['id' => 'lotteryTicketsFrom', 'class' => 'form-control m-input']) !!}
-				{{-- <select name="lotteryTicketsTo" class="form-control m_selectpicker" title="-- выбрать --" id="m_selectpicker_to">					
-				</select> --}}
-			</div>
-		</div>
-		<div class="form-group m-form__group row">
-			{!! Form::label('lottery_type', 'Тип:', ['class' => 'col-form-label col-lg-3 col-sm-12']); !!}
-			<div class="col-lg-6 col-md-9 col-sm-12">
-				{!! Form::select('lottery_type', $lotteryTypes, null, ['class' => 'form-control m-bootstrap-select m_selectpicker', 'title' => '-- выбрать --']) !!}
+				@if($lotteryEdition->id)
+					{!! Form::text('lotteryTicketsTo', null, ['id' => 'lotteryTicketsFrom', 'class' => 'form-control m-input', 'disabled']) !!}
+				@else
+					{!! Form::text('lotteryTicketsTo', null, ['id' => 'lotteryTicketsFrom', 'class' => 'form-control m-input']) !!}
+				@endif
 			</div>
 		</div>
 		<div class="m-form__group form-group row">

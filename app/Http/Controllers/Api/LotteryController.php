@@ -119,6 +119,47 @@ class LotteryController extends Controller
         }        
     }
 
+    public function setTicketsWithEdition(Request $request)
+    {
+        $date = date("Y-m-d H:i:s");
+
+        $lotteryEdition = LotteryEdition::find($request->lottery);
+
+        $ticket_number_from = $request->ticket_number_from;
+        $ticket_number_to = $request->ticket_number_to;
+
+        for($i = $ticket_number_from; $i<=$ticket_number_to; $i++){
+
+            // if($i > 9){
+            //     $ticket_number = $i;
+            // } else {
+                $ticket_number = str_pad($i, (strlen($lotteryEdition->tickets_count)-1), "0", STR_PAD_LEFT);
+            // }
+
+            $soldTicket = DB::table('lottery_edition_'.$lotteryEdition->lottery_type.'_'.$lotteryEdition->number)
+            ->where('ticket_number', $ticket_number)->first();
+
+            if($soldTicket){
+                if($soldTicket->user != $request->user()->id){
+                    return response()->json(['message' => 'Билет с номером '.$ticket_number.' недоступен.'], 500);
+                }
+                if($soldTicket->sold_date){
+                    return response()->json(['message' => 'Билет с номером '.$ticket_number.' уже продан.'], 500);
+                }
+            } else {
+                return response()->json(['message' => 'Билет с номером '.$ticket_number.' не существует.'], 500);
+            }
+
+            $ticket = DB::table('lottery_edition_'.$lotteryEdition->lottery_type.'_'.$lotteryEdition->number)
+                ->where('ticket_number', $ticket_number)
+                ->update([
+                    'sold_date' => $date
+                ]);
+        }        
+
+        return response()->json('success', 200, [], JSON_NUMERIC_CHECK);
+    }
+
     public function setTicket(Request $request)
     {
         $date = date("Y-m-d H:i:s");

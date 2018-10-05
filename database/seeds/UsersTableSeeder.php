@@ -14,47 +14,77 @@ class UsersTableSeeder extends Seeder
     {
         User::truncate();
         User::create([
-            'login' => 'shady',
+            'login' => 'admin',
 
-            'email' => 'kendirbaev.aibek@gmail.com',
-            'password' => bcrypt('slimshady11'),
+            'email' => 'admin@gmail.com',
+            'password' => bcrypt('test'),
 
-            'name' => 'Айбек',
-            'lastname' => 'Кендирбаев',
+            'name' => 'Admin',
+            'lastname' => 'Admin',
 
             'type' => 1,
 
-            'avatar' => 'assets/app/media/img/users/300_12.jpg',
+            'avatar' => 'assets/app/media/img/users/300_1.jpg',
 
             'active' => true,
         ]);
         User::create([
-            'login' => 'sh4dy',
+            'login' => 'stock',
 
-            'email' => 'kendirbaev11@gmail.com',
-            'password' => bcrypt('1qaz'),
+            'email' => 'stock@gmail.com',
+            'password' => bcrypt('test'),
 
-            'name' => 'Аман',
-            'lastname' => 'Эсен',
+            'name' => 'Stock',
+            'lastname' => 'Stock',
 
-            'type' => 2,
+            'type' => 4,
+
+            'avatar' => 'assets/app/media/img/users/300_2.jpg',
+
+            'active' => true,
+        ]);
+        User::create([
+            'login' => 'supervisor',
+
+            'email' => 'supervisor@gmail.com',
+            'password' => bcrypt('test'),
+
+            'name' => 'Супервайзер',
+            'lastname' => 'Супервайзер',
+
+            'type' => 3,
 
             'avatar' => 'assets/app/media/img/users/300_3.jpg',
 
             'active' => true,
         ]);
         User::create([
-            'login' => 'test',
+            'login' => 'seller',
 
-            'email' => 'test@gmail.com',
+            'email' => 'seller@gmail.com',
             'password' => bcrypt('test'),
 
-            'name' => 'Test',
-            'lastname' => 'Test',
+            'name' => 'Реализатор',
+            'lastname' => 'Реализатор',
 
-            'type' => 3,
+            'type' => 2,
 
-            'avatar' => 'assets/app/media/img/users/300_1.jpg',
+            'avatar' => 'assets/app/media/img/users/300_4.jpg',
+
+            'active' => true,
+        ]);
+        User::create([
+            'login' => 'hr',
+
+            'email' => 'hr@gmail.com',
+            'password' => bcrypt('test'),
+
+            'name' => 'Отдел кадров',
+            'lastname' => 'Отдел кадров',
+
+            'type' => 5,
+
+            'avatar' => 'assets/app/media/img/users/300_5.jpg',
 
             'active' => true,
         ]);

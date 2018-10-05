@@ -39,16 +39,18 @@
 								</span>
 							</a>
 						</li>
-						<li class="m-menu__item " aria-haspopup="true"  m-menu-link-redirect="1">
-							<a  href="{{route('userTypes.index')}}" class="m-menu__link ">
-								<i class="m-menu__link-bullet m-menu__link-bullet--dot">
-									<span></span>
-								</i>
-								<span class="m-menu__link-text">
+						@if((auth()->user()->isAdmin()) || (auth()->user()->isStock()))
+							<li class="m-menu__item " aria-haspopup="true"  m-menu-link-redirect="1">
+								<a  href="{{route('userTypes.index')}}" class="m-menu__link ">
+									<i class="m-menu__link-bullet m-menu__link-bullet--dot">
+										<span></span>
+									</i>
+									<span class="m-menu__link-text">
 									Типы пользователей
 								</span>
-							</a>
-						</li>						
+								</a>
+							</li>
+						@endif
 					</ul>
 				</div>
 			</li>
@@ -70,23 +72,25 @@
 								</span>
 							</span>
 						</li>
-						<li class="m-menu__item " aria-haspopup="true" >
-							<a  href="{{route('lotteryTypes.index')}}" class="m-menu__link ">
-								<i class="m-menu__link-bullet m-menu__link-bullet--dot">
-									<span></span>
-								</i>
-								<span class="m-menu__link-text">
-									Виды лотерей
-								</span>
-							</a>
-						</li>
+						@if((auth()->user()->isAdmin()) || (auth()->user()->isStock()))
+							<li class="m-menu__item " aria-haspopup="true" >
+								<a  href="{{route('lotteryTypes.index')}}" class="m-menu__link ">
+									<i class="m-menu__link-bullet m-menu__link-bullet--dot">
+										<span></span>
+									</i>
+									<span class="m-menu__link-text">
+										Виды лотерей
+									</span>
+								</a>
+							</li>
+						@endif
 						<li class="m-menu__item " aria-haspopup="true"  m-menu-link-redirect="1">
 							<a  href="{{route('lotteryEditions.index')}}" class="m-menu__link ">
 								<i class="m-menu__link-bullet m-menu__link-bullet--dot">
 									<span></span>
 								</i>
 								<span class="m-menu__link-text">
-									Билеты с тиражом
+									Тиражные лотереи
 								</span>
 							</a>
 						</li>
@@ -96,13 +100,56 @@
 									<span></span>
 								</i>
 								<span class="m-menu__link-text">
-									Билеты без тиража
+									Мгновенные лотереи
 								</span>
 							</a>
 						</li>
 					</ul>
 				</div>
 			</li>
+			@if((auth()->user()->isAdmin()) || (auth()->user()->isStock()))
+				<li class="m-menu__item  m-menu__item--submenu" aria-haspopup="true"  m-menu-submenu-toggle="hover">
+					<a  href="javascript:;" class="m-menu__link m-menu__toggle">
+						<i class="m-menu__link-icon jam jam-file"></i>
+						<span class="m-menu__link-text">
+							Отчеты
+						</span>
+						<i class="m-menu__ver-arrow jam jam-chevron-right"></i>
+					</a>
+					<div class="m-menu__submenu ">
+						<span class="m-menu__arrow"></span>
+						<ul class="m-menu__subnav">
+							<li class="m-menu__item  m-menu__item--parent" aria-haspopup="true" >
+								<span class="m-menu__link">
+									<span class="m-menu__link-text">
+										Отчеты
+									</span>
+								</span>
+							</li>
+							<li class="m-menu__item " aria-haspopup="true" >
+								<a  href="{{route('reports.index')}}" class="m-menu__link ">
+									<i class="m-menu__link-bullet m-menu__link-bullet--dot">
+										<span></span>
+									</i>
+									<span class="m-menu__link-text">
+										Все отчеты
+									</span>
+								</a>
+							</li>
+							<li class="m-menu__item " aria-haspopup="true" >
+								<a  href="{{route('reports.create')}}" class="m-menu__link ">
+									<i class="m-menu__link-bullet m-menu__link-bullet--dot">
+										<span></span>
+									</i>
+									<span class="m-menu__link-text">
+										Создать отчет
+									</span>
+								</a>
+							</li>
+						</ul>
+					</div>
+				</li>
+			@endif
 			<li class="m-menu__item  m-menu__item--submenu" aria-haspopup="true"  m-menu-submenu-toggle="hover">
 				<a  href="javascript:;" class="m-menu__link m-menu__toggle">
 					<i class="m-menu__link-icon jam jam-cog"></i>

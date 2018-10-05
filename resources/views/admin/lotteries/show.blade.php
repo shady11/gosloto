@@ -60,12 +60,14 @@
 					<a href="{{route('lotteries.index')}}" class="m-widget__detalis btn btn-secondary">
 						Назад
 					</a>
-					<a href="{{route('lotteries.edit', $lottery)}}" class="m-widget__detalis btn btn-info">
-						Редактировать
-					</a>
-					<a href="{{route('lotteries.delete', $lottery)}}" class="btn btn-danger">
-						Удалить
-					</a>
+					@if((auth()->user()->isAdmin()) || (auth()->user()->isStock()))
+						<a href="{{route('lotteries.edit', $lottery)}}" class="m-widget__detalis btn btn-info">
+							Редактировать
+						</a>
+						<a href="{{route('lotteries.delete', $lottery)}}" class="btn btn-danger">
+							Удалить
+						</a>
+					@endif
 				</div>
 			</div>
 		</div>

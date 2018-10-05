@@ -96,3 +96,9 @@
   width: 100%;
 }
 
+.dropdown-header {
+  padding: 15px;
+  font-size: 1rem;
+  color: #6167e6;
+}
+

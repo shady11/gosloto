@@ -17,9 +17,11 @@
 				</div>
 			</div>
 			<div class="m-portlet__head-tools">
-				<a href="{{route('userTypes.create')}}" class="btn btn-info m--margin-left-10">
-					Добавить тип
-				</a>
+				@if(auth()->user()->isAdmin())
+					<a href="{{route('userTypes.create')}}" class="btn btn-info m--margin-left-10">
+						Добавить тип
+					</a>
+				@endif
 				<a href="{{route('users.create')}}" class="btn btn-success m--margin-left-10">
 					Добавить пользователя
 				</a>
@@ -70,7 +72,7 @@
 												<option value="{{$userType->id}}">
 													{{$userType->name}}
 												</option>
-											@endforeach											
+											@endforeach
 										</select>
 									</div>
 								</div>

@@ -19,8 +19,8 @@
 		</div>
 		
 		<!--begin::Form-->
-		{!! Form::model($lotteryEdition, ['route' => ['lotteryEditions.update', $lotteryEdition], 'method' => 'PUT', 'enctype' => 'multipart/form-data', 'class' => 'm-form']) !!}
-			@include('admin.lotteryEditions.form', $lotteryEdition)
+		{!! Form::model($lotteryEdition, ['route' => ['lottery.lotteryEdition.update', $lotteryType, $lotteryEdition], 'method' => 'PUT', 'enctype' => 'multipart/form-data', 'class' => 'm-form']) !!}
+			@include('admin.lotteryEditions.form', [$lotteryType, $lotteryEdition])
 		{!! Form::close() !!}
 		<!--end::Form-->
 	</div>

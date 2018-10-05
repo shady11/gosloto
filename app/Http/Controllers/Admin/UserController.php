@@ -14,7 +14,14 @@ class UserController extends Controller
     public function index()
     {
         $data = User::all();
-        $userTypes = UserType::all();
+        if(auth()->user()->isStock()){
+            $userTypes = UserType::where('slug', 'seller')->orWhere('slug', 'supervisor')->get();
+        } elseif(auth()->user()->isSupervisor()) {
+            $userTypes = UserType::where('slug', 'seller')->get();
+        } else {
+            $userTypes = UserType::all();
+        }
+
         return view('admin.users.index', 
             compact(
                 'data',
@@ -39,65 +46,214 @@ class UserController extends Controller
             return $page;
         });
 
-        if($sort){
-            $result = User::orderBy($sort['field'], $sort['sort'])->get();
-        } else {
-            $result = User::orderBy('id', 'desc')->get();
-        }
-
         if($query){
-            if(array_key_exists('active', $query)){
-                if($query['active'] == 1){
-                    if(array_key_exists('type', $query)){
-                        if($sort){
-                            $resultPaginated = User::where('active', true)->where('type', $query['type'])->orderBy($sort['field'], $sort['sort'])->paginate($perpage);
+            if(array_key_exists('generalSearch', $query)){
+                if(array_key_exists('active', $query)){
+                    if($query['active'] == 1){
+                        if(array_key_exists('type', $query)){
+                            if($sort){
+                                $resultPaginated = User::search($query['generalSearch'])->where('active', true)->where('type', $query['type'])->orderBy($sort['field'], $sort['sort'])->paginate($perpage);
+                            } else {
+                                $resultPaginated = User::search($query['generalSearch'])->where('active', true)->where('type', $query['type'])->orderBy('id', 'desc')->paginate($perpage);
+                            }
                         } else {
-                            $resultPaginated = User::where('active', true)->where('type', $query['type'])->orderBy('id', 'desc')->paginate($perpage);
+                            if($sort){
+                                if(auth()->user()->isStock()){
+                                    $resultPaginated = User::search($query['generalSearch'])->where('type', '2')->orWhere('type', '3')->where('active', true)->orderBy($sort['field'], $sort['sort'])->paginate($perpage);
+                                } elseif(auth()->user()->isSupervisor()) {
+                                    $resultPaginated = User::search($query['generalSearch'])->where('type', '2')->where('active', true)->orderBy($sort['field'], $sort['sort'])->paginate($perpage);
+                                } else {
+                                    $resultPaginated = User::search($query['generalSearch'])->where('active', true)->orderBy($sort['field'], $sort['sort'])->paginate($perpage);
+                                }
+                            } else {
+                                if(auth()->user()->isStock()){
+                                    $resultPaginated = User::search($query['generalSearch'])->where('type', '2')->orWhere('type', '3')->where('active', true)->orderBy('id', 'desc')->paginate($perpage);
+                                } elseif(auth()->user()->isSupervisor()) {
+                                    $resultPaginated = User::search($query['generalSearch'])->where('type', '2')->where('active', true)->orderBy('id', 'desc')->paginate($perpage);
+                                } else {
+                                    $resultPaginated = User::search($query['generalSearch'])->where('active', true)->orderBy('id', 'desc')->paginate($perpage);
+                                }
+                            }
                         }
-                        
-                    } else {
-                        if($sort){
-                            $resultPaginated = User::where('active', true)->orderBy($sort['field'], $sort['sort'])->paginate($perpage);
+                    } elseif($query['active'] == 2){
+                        if(array_key_exists('type', $query)){
+                            if($sort){
+                                $resultPaginated = User::search($query['generalSearch'])->where('active', false)->where('type', $query['type'])->orderBy($sort['field'], $sort['sort'])->paginate($perpage);
+                            } else {
+                                $resultPaginated = User::search($query['generalSearch'])->where('active', false)->where('type', $query['type'])->orderBy('id', 'desc')->paginate($perpage);
+                            }
                         } else {
-                            $resultPaginated = User::where('active', true)->orderBy('id', 'desc')->paginate($perpage);
-                        }                        
+                            if($sort){
+                                if(auth()->user()->isStock()){
+                                    $resultPaginated = User::search($query['generalSearch'])->where('type', '2')->orWhere('type', '3')->where('active', false)->orderBy($sort['field'], $sort['sort'])->paginate($perpage);
+                                } elseif(auth()->user()->isSupervisor()) {
+                                    $resultPaginated = User::search($query['generalSearch'])->where('type', '2')->where('active', false)->orderBy($sort['field'], $sort['sort'])->paginate($perpage);
+                                } else {
+                                    $resultPaginated = User::search($query['generalSearch'])->where('active', false)->orderBy($sort['field'], $sort['sort'])->paginate($perpage);
+                                }
+                            } else {
+                                if(auth()->user()->isStock()){
+                                    $resultPaginated = User::search($query['generalSearch'])->where('type', '2')->orWhere('type', '3')->where('active', false)->orderBy('id', 'desc')->paginate($perpage);
+                                } elseif(auth()->user()->isSupervisor()) {
+                                    $resultPaginated = User::search($query['generalSearch'])->where('type', '2')->where('active', false)->orderBy('id', 'desc')->paginate($perpage);
+                                } else {
+                                    $resultPaginated = User::search($query['generalSearch'])->where('active', false)->orderBy('id', 'desc')->paginate($perpage);
+                                }
+                            }
+                        }
                     }
-                } elseif($query['active'] == 2){
+                } else {
                     if(array_key_exists('type', $query)){
                         if($sort){
-                            $resultPaginated = User::where('active', false)->where('type', $query['type'])->orderBy($sort['field'], $sort['sort'])->paginate($perpage);
+                            if(auth()->user()->isStock()){
+                                $resultPaginated = User::search($query['generalSearch'])->where('type', '2')->orWhere('type', '3')->where('type', $query['type'])->orderBy($sort['field'], $sort['sort'])->paginate($perpage);
+                            } elseif(auth()->user()->isSupervisor()) {
+                                $resultPaginated = User::search($query['generalSearch'])->where('type', '2')->where('type', $query['type'])->orderBy($sort['field'], $sort['sort'])->paginate($perpage);
+                            } else {
+                                $resultPaginated = User::search($query['generalSearch'])->where('type', $query['type'])->orderBy($sort['field'], $sort['sort'])->paginate($perpage);
+                            }
                         } else {
-                            $resultPaginated = User::where('active', false)->where('type', $query['type'])->orderBy('id', 'desc')->paginate($perpage);
+                            if(auth()->user()->isStock()){
+                                $resultPaginated = User::search($query['generalSearch'])->where('type', '2')->orWhere('type', '3')->where('type', $query['type'])->orderBy('id', 'desc')->paginate($perpage);
+                            } elseif(auth()->user()->isSupervisor()) {
+                                $resultPaginated = User::search($query['generalSearch'])->where('type', '2')->where('type', $query['type'])->orderBy('id', 'desc')->paginate($perpage);
+                            } else {
+                                $resultPaginated = User::search($query['generalSearch'])->where('type', $query['type'])->orderBy('id', 'desc')->paginate($perpage);
+                            }
                         }
-                        
                     } else {
                         if($sort){
-                            $resultPaginated = User::where('active', false)->orderBy($sort['field'], $sort['sort'])->paginate($perpage);
+                            if(auth()->user()->isStock()){
+                                $resultPaginated = User::search($query['generalSearch'])->where('type', '2')->orWhere('type', '3')->orderBy($sort['field'], $sort['sort'])->paginate($perpage);
+                            } elseif(auth()->user()->isSupervisor()) {
+                                $resultPaginated = User::search($query['generalSearch'])->where('type', '2')->orderBy($sort['field'], $sort['sort'])->paginate($perpage);
+                            } else {
+                                $resultPaginated = User::search($query['generalSearch'])->orderBy($sort['field'], $sort['sort'])->paginate($perpage);
+                            }
                         } else {
-                            $resultPaginated = User::where('active', false)->orderBy('id', 'desc')->paginate($perpage);
+                            if(auth()->user()->isStock()){
+                                $resultPaginated = User::search($query['generalSearch'])->where('type', '2')->orWhere('type', '3')->orderBy('id', 'desc')->paginate($perpage);
+                            } elseif(auth()->user()->isSupervisor()) {
+                                $resultPaginated = User::search($query['generalSearch'])->where('type', '2')->orderBy('id', 'desc')->paginate($perpage);
+                            } else {
+                                $resultPaginated = User::search($query['generalSearch'])->orderBy('id', 'desc')->paginate($perpage);
+                            }
                         }
                     }
                 }
             } else {
-                if(array_key_exists('type', $query)){
-                    if($sort){
-                        $resultPaginated = User::where('type', $query['type'])->orderBy($sort['field'], $sort['sort'])->paginate($perpage);
-                    } else {
-                        $resultPaginated = User::where('type', $query['type'])->orderBy('id', 'desc')->paginate($perpage);
+                if(array_key_exists('active', $query)){
+                    if($query['active'] == 1){
+                        if(array_key_exists('type', $query)){
+                            if($sort){
+                                $resultPaginated = User::where('active', true)->where('type', $query['type'])->orderBy($sort['field'], $sort['sort'])->paginate($perpage);
+                            } else {
+                                $resultPaginated = User::where('active', true)->where('type', $query['type'])->orderBy('id', 'desc')->paginate($perpage);
+                            }
+                        } else {
+                            if($sort){
+                                if(auth()->user()->isStock()){
+                                    $resultPaginated = User::where('type', '2')->orWhere('type', '3')->where('active', true)->orderBy($sort['field'], $sort['sort'])->paginate($perpage);
+                                } elseif(auth()->user()->isSupervisor()) {
+                                    $resultPaginated = User::where('type', '2')->where('active', true)->orderBy($sort['field'], $sort['sort'])->paginate($perpage);
+                                } else {
+                                    $resultPaginated = User::where('active', true)->orderBy($sort['field'], $sort['sort'])->paginate($perpage);
+                                }
+                            } else {
+                                if(auth()->user()->isStock()){
+                                    $resultPaginated = User::where('type', '2')->orWhere('type', '3')->where('active', true)->orderBy('id', 'desc')->paginate($perpage);
+                                } elseif(auth()->user()->isSupervisor()) {
+                                    $resultPaginated = User::where('type', '2')->where('active', true)->orderBy('id', 'desc')->paginate($perpage);
+                                } else {
+                                    $resultPaginated = User::where('active', true)->orderBy('id', 'desc')->paginate($perpage);
+                                }
+                            }
+                        }
+                    } elseif($query['active'] == 2){
+                        dd(1);
+                        if(array_key_exists('type', $query)){
+                            if($sort){
+                                $resultPaginated = User::where('active', false)->where('type', $query['type'])->orderBy($sort['field'], $sort['sort'])->paginate($perpage);
+                            } else {
+                                $resultPaginated = User::where('active', false)->where('type', $query['type'])->orderBy('id', 'desc')->paginate($perpage);
+                            }
+                        } else {
+                            if($sort){
+                                if(auth()->user()->isStock()){
+                                    $resultPaginated = User::where('type', '2')->orWhere('type', '3')->where('active', false)->orderBy($sort['field'], $sort['sort'])->paginate($perpage);
+                                } elseif(auth()->user()->isSupervisor()) {
+                                    $resultPaginated = User::where('type', '2')->where('active', false)->orderBy($sort['field'], $sort['sort'])->paginate($perpage);
+                                } else {
+                                    $resultPaginated = User::where('active', false)->orderBy($sort['field'], $sort['sort'])->paginate($perpage);
+                                }
+                            } else {
+                                if(auth()->user()->isStock()){
+                                    $resultPaginated = User::where('type', '2')->orWhere('type', '3')->where('active', false)->orderBy('id', 'desc')->paginate($perpage);
+                                } elseif(auth()->user()->isSupervisor()) {
+                                    $resultPaginated = User::where('type', '2')->where('active', false)->orderBy('id', 'desc')->paginate($perpage);
+                                } else {
+                                    $resultPaginated = User::where('active', false)->orderBy('id', 'desc')->paginate($perpage);
+                                }
+                            }
+                        }
                     }
                 } else {
-                    if($sort){
-                        $resultPaginated = User::orderBy($sort['field'], $sort['sort'])->paginate($perpage);
+                    if(array_key_exists('type', $query)){
+                        if($sort){
+                            if(auth()->user()->isStock()){
+                                $resultPaginated = User::where('type', '2')->orWhere('type', '3')->where('type', $query['type'])->orderBy($sort['field'], $sort['sort'])->paginate($perpage);
+                            } elseif(auth()->user()->isSupervisor()) {
+                                $resultPaginated = User::where('type', '2')->where('type', $query['type'])->orderBy($sort['field'], $sort['sort'])->paginate($perpage);
+                            } else {
+                                $resultPaginated = User::where('type', $query['type'])->orderBy($sort['field'], $sort['sort'])->paginate($perpage);
+                            }
+                        } else {
+                            if(auth()->user()->isStock()){
+                                $resultPaginated = User::where('type', '2')->orWhere('type', '3')->where('type', $query['type'])->orderBy('id', 'desc')->paginate($perpage);
+                            } elseif(auth()->user()->isSupervisor()) {
+                                $resultPaginated = User::where('type', '2')->where('type', $query['type'])->orderBy('id', 'desc')->paginate($perpage);
+                            } else {
+                                $resultPaginated = User::where('type', $query['type'])->orderBy('id', 'desc')->paginate($perpage);
+                            }
+                        }
                     } else {
-                        $resultPaginated = User::orderBy('id', 'desc')->paginate($perpage);
-                    }                    
+                        if($sort){
+                            if(auth()->user()->isStock()){
+                                $resultPaginated = User::where('type', '2')->orWhere('type', '3')->orderBy($sort['field'], $sort['sort'])->paginate($perpage);
+                            } elseif(auth()->user()->isSupervisor()) {
+                                $resultPaginated = User::where('type', '2')->orderBy($sort['field'], $sort['sort'])->paginate($perpage);
+                            } else {
+                                $resultPaginated = User::orderBy($sort['field'], $sort['sort'])->paginate($perpage);
+                            }
+                        } else {
+                            if(auth()->user()->isStock()){
+                                $resultPaginated = User::where('type', '2')->orWhere('type', '3')->orderBy('id', 'desc')->paginate($perpage);
+                            } elseif(auth()->user()->isSupervisor()) {
+                                $resultPaginated = User::where('type', '2')->orderBy('id', 'desc')->paginate($perpage);
+                            } else {
+                                $resultPaginated = User::orderBy('id', 'desc')->paginate($perpage);
+                            }
+                        }
+                    }
                 }
             }
         } else {
             if($sort){
-                $resultPaginated = User::orderBy($sort['field'], $sort['sort'])->paginate($perpage);
+                if(auth()->user()->isStock()){
+                    $resultPaginated = User::where('type', '2')->orWhere('type', '3')->orderBy($sort['field'], $sort['sort'])->paginate($perpage);
+                } elseif(auth()->user()->isSupervisor()) {
+                    $resultPaginated = User::where('type', '2')->orderBy($sort['field'], $sort['sort'])->paginate($perpage);
+                } else {
+                    $resultPaginated = User::orderBy($sort['field'], $sort['sort'])->paginate($perpage);
+                }
             } else {
-                $resultPaginated = User::orderBy('id', 'desc')->paginate($perpage);
+                if(auth()->user()->isStock()){
+                    $resultPaginated = User::where('type', '2')->orWhere('type', '3')->orderBy('id', 'desc')->paginate($perpage);
+                } elseif(auth()->user()->isSupervisor()) {
+                    $resultPaginated = User::where('type', '2')->orderBy('id', 'desc')->paginate($perpage);
+                } else {
+                    $resultPaginated = User::orderBy('id', 'desc')->paginate($perpage);
+                }
             }
             
         }
@@ -127,7 +283,7 @@ class UserController extends Controller
            
         $rowIds = array();
         if($request->requestIds){ 
-            foreach ($result as $key => $user) {
+            foreach ($resultPaginated as $key => $user) {
                 $user->orderNumber = $key+1;
                 $rowIds[] = $user->id;
             }
@@ -146,8 +302,15 @@ class UserController extends Controller
 
     public function create()
     {
-        $user = new User;        
-        $userTypes = UserType::pluck('name', 'id')->toArray();
+        $user = new User;
+        if(auth()->user()->isStock()){
+            $userTypes = UserType::where('slug', 'seller')->orWhere('slug', 'supervisor')->pluck('name', 'id')->toArray();
+        } elseif(auth()->user()->isSupervisor()) {
+            $userTypes = UserType::where('slug', 'seller')->pluck('name', 'id')->toArray();
+        } else {
+            $userTypes = UserType::pluck('name', 'id')->toArray();
+        }
+
         return view('admin.users.create', 
             compact(
                 'user',

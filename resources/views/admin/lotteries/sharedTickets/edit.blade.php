@@ -20,7 +20,7 @@
 		
 		<!--begin::Form-->
 		{!! Form::model($sharedTicket, ['route' => ['sharedTickets.update', $lottery, $sharedTicket], 'method' => 'PUT', 'enctype' => 'multipart/form-data', 'class' => 'm-form']) !!}
-			@include('admin.lotteries.sharedTickets.form', $sharedTicket)
+			@include('admin.lotteries.sharedTickets.form', [$sharedTicket, $lottery])
 		{!! Form::close() !!}
 		<!--end::Form-->
 	</div>

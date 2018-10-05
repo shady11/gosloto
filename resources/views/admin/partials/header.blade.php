@@ -17,37 +17,37 @@
 				<div id="m_header_topbar" class="m-topbar  m-stack m-stack--ver m-stack--general">
 					<div class="m-stack__item m-topbar__nav-wrapper">
 						<ul class="m-topbar__nav m-nav m-nav--inline">
-							<li class="m-nav__item m-dropdown m-dropdown--large m-dropdown--arrow m-dropdown--align-center m-dropdown--mobile-full-width m-dropdown--skin-light	m-list-search m-list-search--skin-light" m-dropdown-toggle="click" id="m_quicksearch" m-quicksearch-mode="dropdown" m-dropdown-persistent="1">
-								<a href="#" class="m-nav__link m-dropdown__toggle">
-									<span class="m-nav__link-icon">
-										<span class="m-nav__link-icon-wrapper">
-											<i class="flaticon-search-1"></i>
-										</span>
-									</span>
-								</a>
-								<div class="m-dropdown__wrapper">
-									<span class="m-dropdown__arrow m-dropdown__arrow--center"></span>
-									<div class="m-dropdown__inner">
-										<div class="m-dropdown__header">
-											<form  class="m-list-search__form">
-												<div class="m-list-search__form-wrapper">
-													<span class="m-list-search__form-input-wrapper">
-														<input id="m_quicksearch_input" autocomplete="off" type="text" name="q" class="m-list-search__form-input" value="" placeholder="Search...">
-													</span>
-													<span class="m-list-search__form-icon-close" id="m_quicksearch_close">
-														<i class="la la-remove"></i>
-													</span>
-												</div>
-											</form>
-										</div>
-										<div class="m-dropdown__body">
-											<div class="m-dropdown__scrollable m-scrollable" data-scrollable="true" data-height="300" data-mobile-height="200">
-												<div class="m-dropdown__content"></div>
-											</div>
-										</div>
-									</div>
-								</div>
-							</li>										
+							{{--<li class="m-nav__item m-dropdown m-dropdown--large m-dropdown--arrow m-dropdown--align-center m-dropdown--mobile-full-width m-dropdown--skin-light	m-list-search m-list-search--skin-light" m-dropdown-toggle="click" id="m_quicksearch" m-quicksearch-mode="dropdown" m-dropdown-persistent="1">--}}
+								{{--<a href="#" class="m-nav__link m-dropdown__toggle">--}}
+									{{--<span class="m-nav__link-icon">--}}
+										{{--<span class="m-nav__link-icon-wrapper">--}}
+											{{--<i class="flaticon-search-1"></i>--}}
+										{{--</span>--}}
+									{{--</span>--}}
+								{{--</a>--}}
+								{{--<div class="m-dropdown__wrapper">--}}
+									{{--<span class="m-dropdown__arrow m-dropdown__arrow--center"></span>--}}
+									{{--<div class="m-dropdown__inner">--}}
+										{{--<div class="m-dropdown__header">--}}
+											{{--<form  class="m-list-search__form">--}}
+												{{--<div class="m-list-search__form-wrapper">--}}
+													{{--<span class="m-list-search__form-input-wrapper">--}}
+														{{--<input id="m_quicksearch_input" autocomplete="off" type="text" name="q" class="m-list-search__form-input" value="" placeholder="Search...">--}}
+													{{--</span>--}}
+													{{--<span class="m-list-search__form-icon-close" id="m_quicksearch_close">--}}
+														{{--<i class="la la-remove"></i>--}}
+													{{--</span>--}}
+												{{--</div>--}}
+											{{--</form>--}}
+										{{--</div>--}}
+										{{--<div class="m-dropdown__body">--}}
+											{{--<div class="m-dropdown__scrollable m-scrollable" data-scrollable="true" data-height="300" data-mobile-height="200">--}}
+												{{--<div class="m-dropdown__content"></div>--}}
+											{{--</div>--}}
+										{{--</div>--}}
+									{{--</div>--}}
+								{{--</div>--}}
+							{{--</li>										--}}
 							<li class="m-nav__item m-topbar__user-profile  m-dropdown m-dropdown--medium m-dropdown--arrow  m-dropdown--align-right m-dropdown--mobile-full-width m-dropdown--skin-light" m-dropdown-toggle="click">
 								<a href="#" class="m-nav__link m-dropdown__toggle">
 									<span class="m-topbar__userpic">
@@ -60,6 +60,9 @@
 									</span>
 									<span class="m-topbar__username m--hide">
 										{{auth()->user()->getFullName()}}
+									</span>
+									<span class="m-topbar__username m--hide">
+										{{auth()->user()->getUserType()}}
 									</span>
 								</a>
 								<div class="m-dropdown__wrapper">
@@ -74,9 +77,9 @@
 													<span class="m-card-user__name m--font-weight-500">
 														{{auth()->user()->getFullName()}}
 													</span>
-													<a href="" class="m-card-user__email m--font-weight-300 m-link">
-														{{auth()->user()->email}}
-													</a>
+													<span class="m-card-user__type m--font-weight-300">
+														{{auth()->user()->getUserType()->name}}
+													</span>
 												</div>
 											</div>
 										</div>

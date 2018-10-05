@@ -46,6 +46,9 @@ var DatatableRemoteAjaxDemo = {
                 field: "user",
                 title: "Реализатор"
             }, {
+                field: "supervisor",
+                title: "Супервайзер"
+            }, {
                 field: "shared_at",
                 title: "Дата оформления"
             }, {

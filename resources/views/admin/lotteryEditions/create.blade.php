@@ -12,14 +12,14 @@
 			<div class="m-portlet__head-caption">
 				<div class="m-portlet__head-title">
 					<h3 class="m-portlet__head-text">
-						Добавить тираж
+						Добавить тираж {{$lotteryType->name}}
 					</h3>
 				</div>
 			</div>
 		</div>
 		
 		<!--begin::Form-->
-		{!! Form::model($lotteryEdition, ['route' => 'lotteryEditions.store', 'enctype' => 'multipart/form-data', 'class' => 'm-form']) !!}
+		{!! Form::model($lotteryEdition, ['route' => ['lottery.lotteryEdition.store', $lotteryType], 'enctype' => 'multipart/form-data', 'class' => 'm-form']) !!}
 			@include('admin.lotteryEditions.form', $lotteryEdition)
 		{!! Form::close() !!}
 		<!--end::Form-->

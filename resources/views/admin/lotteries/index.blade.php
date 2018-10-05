@@ -16,11 +16,13 @@
 					</h3>
 				</div>
 			</div>
-			<div class="m-portlet__head-tools">
-				<a href="{{route('lotteries.create')}}" class="btn btn-info m--margin-left-10">
-					Добавить
-				</a>
-			</div>
+			@if((auth()->user()->isAdmin()) || (auth()->user()->isStock()))
+				<div class="m-portlet__head-tools">
+					<a href="{{route('lotteries.create')}}" class="btn btn-info m--margin-left-10">
+						Добавить
+					</a>
+				</div>
+			@endif
 		</div>
 		<div class="m-portlet__body">
 			<!--begin: Search Form -->

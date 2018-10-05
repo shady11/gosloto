@@ -41,7 +41,8 @@ class LotteryController extends Controller
 
         foreach ($resultPaginated as $row) {
             $row->lottery_type = $row->getLotteryType()->name;
-            $row->actions = '
+            if((auth()->user()->isAdmin()) || (auth()->user()->isStock())){
+                $row->actions = '
                 <a href="'.route('lotteries.show', $row).'" class="m-portlet__nav-link btn m-btn m-btn--hover-success m-btn--icon m-btn--icon-only m-btn--pill" title="Просмотр">
                     <i class="jam jam-info"></i>
                 </a>
@@ -52,6 +53,14 @@ class LotteryController extends Controller
                     <i class="jam jam-trash-alt"></i>
                 </a>
             ';
+            } elseif (auth()->user()->isSupervisor()) {
+                $row->actions = '
+                <a href="'.route('lotteries.show', $row).'" class="m-portlet__nav-link btn m-btn m-btn--hover-success m-btn--icon m-btn--icon-only m-btn--pill" title="Просмотр">
+                    <i class="jam jam-info"></i>
+                </a>
+            ';
+            }
+
         }
 
         if(array_key_exists('pages', $pagination)) { $pages = $pagination['pages']; } 
