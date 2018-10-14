@@ -2,16 +2,17 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Models\LotteryEdition;
+use App\Models\Draw;
+use App\Models\DrawLottery;
+use App\Models\InstantLottery;
 use App\Models\Report;
-use App\Models\LotteryType;
+use App\Models\SharedTicket;
 use App\Models\User;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use Barryvdh\DomPDF\Facade as PDF;
 
-use App\Exports\ReportsExport;
 use Maatwebsite\Excel\Facades\Excel;
+use App\Exports\ReportsExport;
 
 class ReportController extends Controller
 {
@@ -41,60 +42,60 @@ class ReportController extends Controller
     {
 //        dd($request);
 
-        $lottery_type_ids = $request->lottery_types;
-        $lottery_editions_ids = $request->lottery_editions;
-        $supervisor_ids = $request->supervisors;
-        $user_ids = $request->users;
+        $drawLotteryIds = $request->drawLotteries;
+        $instantLotteryIds = $request->instantLotteries;
+        $drawIds = $request->draws;
+        $supervisorIds = $request->supervisors;
+        $sellerIds = $request->sellers;
 
-        $lottery_types = collect();
-        $lottery_editions = collect();
+        $drawLotteries = collect();
+        $instantLotteries = collect();
+        $sharedTickets = collect();
+        $draws = collect();
         $supervisors = collect();
+        $sellers = collect();
 
-        if($lottery_type_ids){
-            foreach ($lottery_type_ids as $lottery_type_id) {
-                $lottery_types = $lottery_types->push(LotteryType::find($lottery_type_id));
+        if($drawLotteryIds){
+            foreach ($drawLotteryIds as $drawLotteryId) {
+                $drawLotteries = $drawLotteries->push(DrawLottery::find($drawLotteryId));
             }
-        } else {
-            $lottery_types = LotteryType::all();
         }
 
-        if($supervisor_ids){
-            foreach ($supervisor_ids as $supervisor_id) {
-                $supervisors = $supervisors->push(User::find($supervisor_id));
-            }
-        } else {
-            $supervisors = User::where('type', '3')->get();
-        }
+        if($instantLotteryIds){
+            foreach ($instantLotteryIds as $instantLotteryId) {
+                $instantLotteries = $instantLotteries->push(InstantLottery::find($instantLotteryId));
 
-        if($request->has_edition){
-
-            if($lottery_editions_ids){
-                foreach ($lottery_editions_ids as $lottery_editions_id) {
-                    $lottery_editions = $lottery_editions->push(LotteryEdition::find($lottery_editions_id));
+//                dd(InstantLottery::find($instantLotteryId)->getSharedTickets);
+                foreach (InstantLottery::find($instantLotteryId)->getSharedTickets as $sharedTicket){
+                    $sharedTickets = $sharedTickets->push($sharedTicket);
                 }
-            } else {
-                $lottery_editions = LotteryEdition::all();
             }
-
-        } else {
-
-//            $lottery_types
-
         }
 
-        $data = compact('lottery_types', 'lottery_editions', 'supervisors');
+        if($drawIds){
+            foreach ($drawIds as $drawId) {
+                $draws = $draws->push(Draw::find($drawId));
+            }
+        }
 
-//        $dir  = 'assets/reports/';
-//        $storage = \Storage::disk('public');
-//        $storage->makeDirectory($dir);
-//
-////        return view('admin.reports.pdf');
-//        $pdf = PDF::loadView('admin.reports.pdf', compact('lottery_types', 'lottery_editions', 'supervisors'));
-//        return $pdf->stream('invoice.pdf');
+        if($supervisorIds){
+            foreach ($supervisorIds as $supervisorId) {
+                $supervisors = $supervisors->push(User::find($supervisorId));
+            }
+        }
 
-//        return view('admin.exports.report', compact('lottery_types', 'lottery_editions', 'supervisors'));
+        if($sellerIds){
+            foreach ($sellerIds as $sellerId) {
+                $sellers = $sellers->push(User::find($sellerId));
+            }
+        }
 
-        return Excel::download(new ReportsExport($data), 'users.xlsx');
+        $data = compact('drawLotteries', 'instantLotteries', 'sharedTickets', 'draws', 'supervisors', 'sellers');
+//        dd($data);
+
+//        return view('admin.exports.report', $data);
+
+        return Excel::download(new ReportsExport($data), 'отчет_'.date("d_m_Y").'.xlsx');
     }
 
     public function show(Report $report)
@@ -117,38 +118,31 @@ class ReportController extends Controller
         //
     }
 
-    public function GetPdf(Request $request)
+    public function reportGetDrawLotteries(Request $request)
     {
-//        dd($request);
-//        $dir  = 'assets/reports/';
-//        $storage = \Storage::disk('public');
-//        $storage->makeDirectory($dir);
-//
-////        return view('admin.reports.pdf');
-//        $pdf = PDF::loadView('admin.reports.pdf', $request);
-//        return $pdf->stream('invoice.pdf');
+        $lotteries = DrawLottery::all();
+        $onChange = 'onchange="getDraws(this)"';
 
-        $data = User::all();
+        $result = '<select id="drawLotterySelect" '.$onChange.' class="form-control m-bootstrap-select m_selectpicker" title="-- выбрать --" multiple data-actions-box="true" data-select-all-text="Выбрать все" data-deselect-all-text="Отменить" name="drawLotteries[]">';
 
-        return Excel::download(new UsersExport($data), 'users.xlsx');
+        foreach ($lotteries as $lottery){
+            $result .= '<option value="'.$lottery->id.'">'.$lottery->name.'</option>';
+        }
+
+        $result .= '</select>';
+
+        return $result;
 
     }
 
-    public function reportGetLotteryTypes(Request $request)
+    public function reportGetInstantLotteries()
     {
-        $has_edition = $request->has_edition;
-        if($has_edition){
-            $lotteryTypes = LotteryType::where('has_edition', true)->get();
-            $onChange = 'onchange="getLotteryEditions(this)"';
-        } else {
-            $lotteryTypes = LotteryType::where('has_edition', false)->get();
-            $onChange = '';
-        }
+        $lotteries = InstantLottery::all();
 
-        $result = '<select id="lotteryTypeSelect" '.$onChange.' class="form-control m-bootstrap-select m_selectpicker" title="-- выбрать --" multiple data-actions-box="true" data-select-all-text="Выбрать все" data-deselect-all-text="Отменить" name="lottery_types[]">';
+        $result = '<select id="instantLotterySelect" class="form-control m-bootstrap-select m_selectpicker" title="-- выбрать --" multiple data-actions-box="true" data-select-all-text="Выбрать все" data-deselect-all-text="Отменить" name="instantLotteries[]">';
 
-        foreach ($lotteryTypes as $lotteryType){
-            $result .= '<option value="'.$lotteryType->id.'">'.$lotteryType->name.'</option>';
+        foreach ($lotteries as $lottery){
+            $result .= '<option value="'.$lottery->id.'">'.$lottery->name.'</option>';
         }
 
         $result .= '</select>';
@@ -156,25 +150,25 @@ class ReportController extends Controller
         return $result;
     }
 
-    public function reportGetLotteryEditions(Request $request)
+    public function reportGetDraws(Request $request)
     {
         $ids = $request->ids;
-        $lotteryEditions = collect();
+        $draws = collect();
 
         if($ids){
             foreach ($ids as $id){
-                $lotteryEditions = $lotteryEditions->merge(LotteryEdition::where('lottery_type', $id)->get());
+                $draws = $draws->merge(Draw::where('lottery_id', $id)->get());
             }
 
-            $result = '<select class="form-control m-bootstrap-select m_selectpicker" title="-- выбрать --" multiple data-actions-box="true" data-select-all-text="Выбрать все" data-deselect-all-text="Отменить" name="lottery_editions[]">';
+            $result = '<select class="form-control m-bootstrap-select m_selectpicker" title="-- выбрать --" multiple data-actions-box="true" data-select-all-text="Выбрать все" data-deselect-all-text="Отменить" name="draws[]">';
 
-            foreach ($lotteryEditions as $lotteryEdition){
-                $result .= '<option value="'.$lotteryEdition->id.'">'.$lotteryEdition->getLotteryType()->name.' №'.$lotteryEdition->number.'</option>';
+            foreach ($draws as $draw){
+                $result .= '<option value="'.$draw->id.'">'.$draw->getLottery->name.' №'.$draw->draw_number.'</option>';
             }
 
             $result .= '</select>';
         } else {
-            $result = '<select class="form-control m-bootstrap-select m_selectpicker" title="-- выбрать --" name="lottery_editons[]"></select>';
+            $result = '<select class="form-control m-bootstrap-select m_selectpicker" title="-- выбрать --" name="draws[]"></select>';
         }
 
         return $result;

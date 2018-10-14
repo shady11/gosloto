@@ -101,6 +101,83 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
         return $lotteriesResult;
     }
 
+//    Lotteries
+    public function getInstantLotteries(){
+        $lotteriesResult = collect();
+        $lotteries = InstantLottery::all();
+        foreach ($lotteries as $key => $row) {
+            $sharedTickets = SharedTicket::where('supervisor_id', $this->id)->where('lottery_id', $row->id)->whereNotNull('shared_to_supervisor_at')->first();
+            if($sharedTickets){
+                $lotteriesResult = $lotteriesResult->merge($row);
+            }
+        }
+        return $lotteriesResult;
+    }
+
+    public function getSupervisorInstantLotteries($sortField, $sortOrder, $perPage)
+    {
+        $lotteriesResult = array();
+        $lotteries = InstantLottery::orderBy($sortField, $sortOrder)->get();
+        foreach ($lotteries as $key => $row) {
+            $sharedTickets = SharedTicket::where('supervisor_id', $this->id)->where('lottery_id', $row->id)->whereNotNull('shared_to_supervisor_at')->first();
+            if($sharedTickets){
+                $lotteriesResult[] = $row;
+            }
+        }
+        return $this->customPaginate($lotteriesResult, $perPage);
+    }
+
+    public function getSupervisorDrawLotteries($sortField, $sortOrder, $perPage)
+    {
+        $lotteriesResult = $drawsResult = array();
+        $lotteries = DrawLottery::orderBy($sortField, $sortOrder)->get();
+        foreach ($lotteries as $key => $row){
+            $draws = Draw::where('lottery_id', $row->id)->get();
+            foreach ($draws as $draw){
+                $drawTickets = DB::table($row->getNameSlugged().'_'.$draw->draw_number)->where('supervisor_id', $this->id)->get();
+                if($drawTickets->isNotEmpty()){
+                    $drawsResult[] = $draw;
+                }
+            }
+            if($drawsResult){
+                $lotteriesResult[] = $row;
+            }
+        }
+        return $this->customPaginate($lotteriesResult, $perPage);
+    }
+
+    public function getSupervisorDraws($drawLottery, $sortField, $sortOrder, $perPage)
+    {
+        $drawsResult = array();
+        $draws = Draw::where('lottery_id', $drawLottery)->get();
+        foreach ($draws as $draw){
+            $drawTickets = DB::table($draw->getLottery->getNameSlugged().'_'.$draw->draw_number)->where('supervisor_id', $this->id)->get();
+            if($drawTickets->isNotEmpty()){
+                $drawsResult[] = $draw;
+            }
+        }
+        return $this->customPaginate($drawsResult, $perPage);
+    }
+
+//    Tickets
+    public function getTotalDrawTickets($draw){
+        return DB::table($draw->getLottery->getNameSlugged().'_'.$draw->draw_number)->where('supervisor_id', $this->id)->orderBy('ticket_number', 'asc')->get();
+    }
+    public function getSoldDrawTickets($draw){
+        return DB::table($draw->getLottery->getNameSlugged().'_'.$draw->draw_number)->
+            where('supervisor_id', $this->id)->
+            where('status', 3)->
+            orderBy('ticket_number', 'asc')->
+            get();
+    }
+    public function getReturnedDrawTickets($draw){
+        return DB::table($draw->getLottery->getNameSlugged().'_'.$draw->draw_number)->
+            where('supervisor_id', $this->id)->
+            where('status', 4)->
+            orderBy('ticket_number', 'asc')->
+            get();
+    }
+
 //    User Types
     public function isAdmin()
     {

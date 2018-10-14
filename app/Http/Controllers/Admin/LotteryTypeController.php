@@ -38,17 +38,30 @@ class LotteryTypeController extends Controller
         }
         
         foreach ($resultPaginated as $row) {
-            $row->actions = '
-                <a href="'.route('lotteryTypes.show', $row).'" class="m-portlet__nav-link btn m-btn m-btn--hover-info m-btn--icon m-btn--icon-only m-btn--pill" title="Показать">
-                    <i class="jam jam-info"></i>
-                </a>
-                <a href="'.route('lotteryTypes.edit', $row).'" class="m-portlet__nav-link btn m-btn m-btn--hover-info m-btn--icon m-btn--icon-only m-btn--pill" title="Редактировать">
-                    <i class="jam jam-write"></i>
-                </a>
-                <a href="'.route('lotteryTypes.delete', $row).'" class="m-portlet__nav-link btn m-btn m-btn--hover-danger m-btn--icon m-btn--icon-only m-btn--pill" title="Удалить">
-                    <i class="jam jam-trash-alt"></i>
-                </a>
-            ';
+            if($row->has_edition)
+                $row->actions = '
+                    <a href="'.route('lotteryTypes.show', $row).'" class="m-portlet__nav-link btn m-btn m-btn--hover-info m-btn--icon m-btn--icon-only m-btn--pill" title="Показать">
+                        <i class="jam jam-info"></i>
+                    </a>
+                    <a href="'.route('lotteryTypes.edit', $row).'" class="m-portlet__nav-link btn m-btn m-btn--hover-info m-btn--icon m-btn--icon-only m-btn--pill" title="Редактировать">
+                        <i class="jam jam-write"></i>
+                    </a>
+                    <a href="'.route('lotteryTypes.delete', $row).'" class="m-portlet__nav-link btn m-btn m-btn--hover-danger m-btn--icon m-btn--icon-only m-btn--pill" title="Удалить">
+                        <i class="jam jam-trash-alt"></i>
+                    </a>
+                ';
+            else
+                $row->actions = '
+                    <a href="'.route('lotteries.show', $row).'" class="m-portlet__nav-link btn m-btn m-btn--hover-info m-btn--icon m-btn--icon-only m-btn--pill" title="Показать">
+                        <i class="jam jam-info"></i>
+                    </a>
+                    <a href="'.route('lotteries.edit', $row).'" class="m-portlet__nav-link btn m-btn m-btn--hover-info m-btn--icon m-btn--icon-only m-btn--pill" title="Редактировать">
+                        <i class="jam jam-write"></i>
+                    </a>
+                    <a href="'.route('lotteries.delete', $row).'" class="m-portlet__nav-link btn m-btn m-btn--hover-danger m-btn--icon m-btn--icon-only m-btn--pill" title="Удалить">
+                        <i class="jam jam-trash-alt"></i>
+                    </a>
+                ';
         }
 
         if(array_key_exists('pages', $pagination)) { $pages = $pagination['pages']; } 

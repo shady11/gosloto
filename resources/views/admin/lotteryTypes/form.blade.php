@@ -46,7 +46,7 @@
 				<button type="submit" class="btn btn-success">
 					Сохранить
 				</button>
-				<a href="#" onclick="window.history.back();" class="btn btn-secondary">
+				<a href="{{route('lotteryTypes.index')}}" class="btn btn-secondary">
 					Назад
 				</a>
 			</div>

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\InstantLottery;
 use App\Models\Lottery;
 use App\Models\SharedTicket;
 use App\Models\User;
@@ -83,28 +84,33 @@ class SharedTicketController extends Controller
         return json_encode($result);
     }
     
-    public function create(Lottery $lottery)
+    public function create(InstantLottery $instantLottery)
     {
         $sharedTicket = new SharedTicket;
-        $availableTickets = $lottery->getAvailableTickets();
-        if(auth()->user()->isAdmin() || auth()->user()->isStock()){
-            $users = User::where('type', 3)->where('active', true)->pluck('name', 'id')->toArray();
-        } else {
-            $users = User::where('type', 2)->where('active', true)->pluck('name', 'id')->toArray();
-        }
-        return view('admin.lotteries.sharedTickets.create', compact('sharedTicket', 'lottery', 'users', 'availableTickets'));
+
+        $availableTickets = $instantLottery->getAvailableTickets();
+
+        $sellers = User::where('type', 2)->pluck('name', 'id')->toArray();
+        $sellers = array_add($sellers, 0, 'не выбрано');
+        $supervisors = User::where('type', 3)->pluck('name', 'id')->toArray();
+        $supervisors = array_add($supervisors, 0, 'не выбрано');
+
+        return view('admin.instantLottery.sharedTicket.create',
+            compact(
+                'sharedTicket',
+                'instantLottery',
+                'sellers',
+                'supervisors',
+                'availableTickets'
+            )
+        );
     }
 
-    public function store(Request $request, Lottery $lottery)
+    public function store(Request $request, InstantLottery $instantLottery)
     {
-        $sharedTicket = SharedTicket::create($request->except('user', 'supervisor'));
-        if(auth()->user()->isAdmin() || auth()->user()->isStock()){
-            $sharedTicket->supervisor = $request->user;
-        } else {
-            $sharedTicket->user = $request->user;
-        }
-        $sharedTicket->save();
-        return redirect()->route('lotteries.show', $lottery);
+        $sharedTicket = SharedTicket::create($request->all());
+
+        return redirect()->route('instantLottery.show', $instantLottery);
     }
 
     public function show(SharedTicket $sharedTicket)

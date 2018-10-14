@@ -125,7 +125,6 @@ class LotteryEditionController extends Controller
         } else {
             $lotteryEdition = LotteryEdition::create($request->except('lotteryTicketsFrom', 'lotteryTicketsTo'));
         }
-        dd(1);
 
         if(!Schema::hasTable('lottery_edition_'.$lotteryEdition->lottery_type.'_'.$lotteryEdition->number)){
             Schema::create('lottery_edition_'.$lotteryEdition->lottery_type.'_'.$lotteryEdition->number, function (Blueprint $table) {

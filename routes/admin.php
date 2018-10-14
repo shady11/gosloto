@@ -58,6 +58,46 @@ Route::middleware('localeSessionRedirect', 'localizationRedirect', 'localeViewPa
         // reports routes
         Route::resource('reports', 'ReportController');
         Route::get('reportspdf', ['uses' => 'ReportController@GetPdf']);
+
+
+
+        // lotteries
+        Route::name('lottery.index')->get('lottery/all', ['uses' => 'NavController@lottery']);
+
+        // draw lotteries
+        Route::resource('drawLottery', 'DrawLotteryController');
+        Route::name('drawLottery.delete')->get('drawLottery/delete/{drawLottery}', ['uses' => 'DrawLotteryController@destroy']);
+        Route::name('drawLottery.reportAll')->get('drawLottery/report/all', ['uses' => 'DrawLotteryController@reportAll']);
+        Route::resource('drawLottery/{drawLottery}/draw', 'DrawController', ['as' => 'drawLottery']);
+        Route::name('drawLottery.draw.delete')->get('drawLottery/{drawLottery}/draw/{draw}/delete', ['uses' => 'DrawController@destroy']);
+        Route::name('drawLottery.draw.report')->get('drawLottery/{drawLottery}/draw/{draw}/report', ['uses' => 'DrawController@report']);
+        Route::resource('drawLottery/{drawLottery}/draw/{draw}/ticket', 'DrawTicketController', ['as' => 'drawLottery.draw']);
+        Route::name('drawLottery.draw.ticket.delete')->get('drawLottery/{drawLottery}/draw/{draw}/ticket/{ticket}/delete', ['uses' => 'DrawTicketController@destroy']);
+        Route::name('drawLottery.draw.ticket.update')->post('drawLottery/{drawLottery}/draw/{draw}/ticket/{ticket}/update', ['uses' => 'DrawTicketController@update']);
+        Route::name('drawLottery.draw.ticketsAdd')->get('drawLottery/{drawLottery}/draw/{draw}/ticketsAdd', ['uses' => 'DrawTicketController@ticketsAdd']);
+        Route::name('drawLottery.draw.ticketsAddStore')->post('drawLottery/{drawLottery}/draw/{draw}/ticketsAddStore', ['uses' => 'DrawTicketController@ticketsAddStore']);
+        Route::name('drawLottery.draw.ticketsShare')->get('drawLottery/{drawLottery}/draw/{draw}/ticketsShare', ['uses' => 'DrawTicketController@ticketsShare']);
+        Route::name('drawLottery.draw.ticketsShareStore')->post('drawLottery/{drawLottery}/draw/{draw}/ticketsShareStore', ['uses' => 'DrawTicketController@ticketsShareStore']);
+        Route::name('drawLottery.draw.ticketsReturn')->get('drawLottery/{drawLottery}/draw/{draw}/ticketsReturn', ['uses' => 'DrawTicketController@ticketsReturn']);
+        Route::name('drawLottery.draw.ticketsReturnStore')->post('drawLottery/{drawLottery}/draw/{draw}/ticketsReturnStore', ['uses' => 'DrawTicketController@ticketsReturnStore']);
+        Route::name('drawLottery.draw.ticketsReturnScan')->get('drawLottery/{drawLottery}/draw/{draw}/ticketsReturnScan', ['uses' => 'DrawTicketController@ticketsReturnScan']);
+        Route::name('drawLottery.draw.ticketsReturnScanStore')->post('drawLottery/{drawLottery}/draw/{draw}/ticketsReturnScanStore', ['uses' => 'DrawTicketController@ticketsReturnScanStore']);
+        Route::name('drawLottery.draw.ticketsSold')->get('drawLottery/{drawLottery}/draw/{draw}/ticketsSold', ['uses' => 'DrawTicketController@ticketsSold']);
+
+        // instant lotteries
+        Route::resource('instantLottery', 'InstantLotteryController');
+        Route::name('instantLottery.delete')->get('instantLottery/delete/{instantLottery}', ['uses' => 'InstantLotteryController@destroy']);
+        Route::name('instantLottery.reportAll')->get('instantLottery/report/all', ['uses' => 'InstantLotteryController@reportAll']);
+        Route::resource('instantLottery/{instantLottery}/sharedTicket', 'InstantLotterySharedTicketController', ['as' => 'instantLottery']);
+        Route::name('instantLottery.sharedTicket.delete')->get('instantLottery/{instantLottery}/sharedTicket/delete/{sharedTicket}', ['uses' => 'InstantLotterySharedTicketController@destroy']);
+        Route::name('instantLottery.sharedTicket.ticketsSold')
+            ->get('instantLottery/{instantLottery}/sharedTicket/{sharedTicket}/ticketsSold', ['uses' => 'InstantLotterySharedTicketController@ticketsSold']);
+        Route::name('instantLottery.sharedTicket.ticketsSoldStore')
+            ->post('instantLottery/{instantLottery}/sharedTicket/{sharedTicket}/ticketsSoldStore', ['uses' => 'InstantLotterySharedTicketController@ticketsSoldStore']);
+        Route::name('instantLottery.sharedTicket.ticketsReturned')
+            ->get('instantLottery/{instantLottery}/sharedTicket/{sharedTicket}/ticketsReturned', ['uses' => 'InstantLotterySharedTicketController@ticketsReturned']);
+        Route::name('instantLottery.sharedTicket.ticketsReturnedStore')
+            ->post('instantLottery/{instantLottery}/sharedTicket/{sharedTicket}/ticketsReturnedStore', ['uses' => 'InstantLotterySharedTicketController@ticketsReturnedStore']);
     });
 
 });
@@ -79,3 +119,20 @@ Route::post('reportGetLotteryTypes', ['uses' => 'ReportController@reportGetLotte
 Route::post('reportGetLotteryEditions', ['uses' => 'ReportController@reportGetLotteryEditions']);
 
 // if(auth()->user()->isStock()){} elseif(auth()->user()->isSupervisor()) {} else {}
+
+//v2.0 routes
+
+//draw lotteries
+Route::get('getDrawLotteries', ['uses' => 'DataTableController@getDrawLotteries']);
+Route::get('getLotteryDraws', ['uses' => 'DataTableController@getLotteryDraws']);
+Route::get('getDrawCreatedTickets', ['uses' => 'DataTableController@getDrawCreatedTickets']);
+Route::get('getDrawReturnedTickets', ['uses' => 'DataTableController@getDrawReturnedTickets']);
+
+//instant lotteries
+Route::get('getInstantLotteries', ['uses' => 'DataTableController@getInstantLotteries']);
+Route::get('getInstantLotterySharedTickets', ['uses' => 'DataTableController@getInstantLotterySharedTickets']);
+
+// reports
+Route::get('reportGetDrawLotteries', ['uses' => 'ReportController@reportGetDrawLotteries']);
+Route::get('reportGetInstantLotteries', ['uses' => 'ReportController@reportGetInstantLotteries']);
+Route::get('reportGetDraws', ['uses' => 'ReportController@reportGetDraws']);

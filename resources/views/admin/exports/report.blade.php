@@ -1,103 +1,139 @@
+@if($drawLotteries->isNotEmpty())
 
-<table class="table" border="1px">
-    <thead>
-    <tr>
-        <th>
-            Лотерея
-        </th>
-        <th>
-            Тираж
-        </th>
-        <th>
-            Супервайзер
-        </th>
-        <th>
-            Количество билетов, шт.
-        </th>
-    </tr>
-    </thead>
-
-    @foreach($lottery_types as $lottery_type)
-
+    <table>
         <tr>
-            <td>{{$lottery_type->name}}</td>
-            <td></td>
-            <td></td>
-            <td></td>
+            <td>Тиражные лотереи</td>
         </tr>
+    </table>
 
-            @foreach($lottery_editions as $lottery_edition)
+    <table class="table" border="1px">
+        <thead>
+            <tr>
+                <th>Лотерея</th>
+                <th>Количество тиражей</th>
+            </tr>
+        </thead>
 
-            @if($lottery_edition->getLotteryType() == $lottery_type)
-
+        <tbody>
+            @foreach($drawLotteries as $drawLottery)
                 <tr>
-                   <td></td>
-                   <td>{{$lottery_edition->number}} {{$lottery_type->name}}</td>
-                   <td></td>
-                   <td></td>
-               </tr>
-
-               @foreach($supervisors as $supervisor)
-
-                   @if($lottery_edition->hasSupervisor($supervisor->id))
-                       <tr>
-                           <td></td>
-                           <td></td>
-                           <td>
-                               {{$supervisor->getFullName()}}
-                           </td>
-                           <td>
-                               {{$lottery_edition->sharedToSupervisorTickets($supervisor->id)->count()}}
-                           </td>
-                       </tr>
-                   @endif
-
-               @endforeach
-
-               <tr>
-                   <td></td>
-                   <td></td>
-                   <td></td>
-                   <td></td>
-               </tr>
-
-                <tr>
-                    <td></td>
-                    <td></td>
-                    <td>
-                        ИТОГО
-                    </td>
-                    <td>
-                        {{$lottery_edition->tickets_count}}
-                    </td>
+                    <td>{{$drawLottery->name}}</td>
+                    <td>{{$drawLottery->getDraws()->count()}}</td>
                 </tr>
+            @endforeach
+        </tbody>
+    </table>
 
+    @foreach($draws as $draw)
+
+        <table class="table" border="1px">
+            <thead>
                 <tr>
-                    <td></td>
-                    <td></td>
-                    <td>
-                        Выдано
-                    </td>
-                    <td>
-                        {{$lottery_edition->sharedTickets()->count()}}
-                    </td>
+                    <th>Лотерея</th>
+                    <th>Тираж</th>
+                    <th>Общее количество билетов, шт.</th>
+                    <th>Выданные билеты, шт.</th>
+                    <th>Проданные билеты, шт.</th>
+                    <th>Утилизированные билеты, шт.</th>
                 </tr>
+            </thead>
 
+            <tbody>
                 <tr>
-                    <td></td>
-                    <td></td>
-                    <td>
-                        Возврат
-                    </td>
-                    <td>
-                        {{$lottery_edition->returnedTickets()->count()}}
-                    </td>
+                    <td>{{$draw->getLottery->name}}</td>
+                    <td>{{$draw->draw_number}}</td>
+                    <td>{{$draw->getTotalTickets()->count()}}</td>
+                    <td>{{$draw->getSharedTicketsToSupervisor()->count()}}</td>
+                    <td>{{$draw->getSoldTickets()->count()}}</td>
+                    <td>{{$draw->getReturnedTickets()->count()}}</td>
                 </tr>
+            </tbody>
+        </table>
 
-            @endif
+        <table class="table" border="1px">
+            <thead>
+                <tr>
+                    <th>Супервайзер</th>
+                    <th>Выданные билеты, шт.</th>
+                    <th>Проданные билеты, шт.</th>
+                    <th>Утилизированные билеты, шт.</th>
+                </tr>
+            </thead>
 
-        @endforeach
+            <tbody>
+                @foreach($supervisors as $supervisor)
+                    @if($draw->hasSupervisor($supervisor->id))
+                        <tr>
+                            <td>{{$supervisor->getFullName()}}</td>
+                            <td>{{$supervisor->getTotalDrawTickets($draw)->count()}}</td>
+                            <td>{{$supervisor->getSoldDrawTickets($draw)->count()}}</td>
+                            <td>{{$supervisor->getReturnedDrawTickets($draw)->count()}}</td>
+                        </tr>
+                    @endif
+                @endforeach
+            </tbody>
+        </table>
 
     @endforeach
 
-</table>
+@endif
+
+@if($instantLotteries->isNotEmpty())
+
+    <table>
+        <tr></tr>
+        <tr>
+            <td>Моментальные лотереи</td>
+        </tr>
+    </table>
+
+    <table class="table" border="1px">
+        <thead>
+            <tr>
+                <th>Лотерея</th>
+                <th>Количество билетов</th>
+                <th>Количество билетов</th>
+            </tr>
+        </thead>
+
+        <tbody>
+            @foreach($instantLotteries as $instantLottery)
+                <tr>
+                    <td>{{$instantLottery->name}}</td>
+                    <td>{{$instantLottery->tickets_count}}</td>
+                </tr>
+            @endforeach
+        </tbody>
+    </table>
+
+    @if($sharedTickets->isNotEmpty())
+        <table class="table" border="1px">
+            <thead>
+            <tr>
+                <th>Супервайзер</th>
+                <th>Лотерея</th>
+                <th>Выданные билеты, шт.</th>
+                <th>Проданные билеты, шт.</th>
+                <th>Утилизированные билеты, шт.</th>
+            </tr>
+            </thead>
+
+            <tbody>
+
+            @foreach($sharedTickets as $sharedTicket)
+
+                <tr>
+                    <td>{{$sharedTicket->getSupervisor->getFullName()}}</td>
+                    <td>{{$sharedTicket->getLottery->name}}</td>
+                    <td>{{$sharedTicket->tickets_count}}</td>
+                    <td>{{$sharedTicket->sold_tickets_count}}</td>
+                    <td>{{$sharedTicket->returned_tickets_count}}</td>
+                </tr>
+
+            @endforeach
+
+            </tbody>
+        </table>
+    @endif
+
+@endif

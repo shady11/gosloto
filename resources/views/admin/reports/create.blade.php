@@ -18,7 +18,7 @@
 
             <!--begin::Form-->
         {!! Form::model($report, ['route' => 'reports.store', 'enctype' => 'multipart/form-data', 'class' => 'm-form']) !!}
-        @include('admin.reports.form', $report)
+            @include('admin.reports.form', $report)
         {!! Form::close() !!}
         <!--end::Form-->
         </div>
@@ -30,47 +30,61 @@
     <script src="{{asset('assets/demo/default/custom/crud/forms/widgets/bootstrap-select.js')}}" type="text/javascript"></script>
     <script src="{{asset('assets/demo/default/custom/crud/forms/widgets/bootstrap-datetimepicker.js')}}" type="text/javascript"></script>
     <script>
-        $('input[name=has_edition]').change(function () {
-            getLotteryTypes($(this).val());
-            if($(this).val() == 0 && !$('#lotteryEditionsParent').hasClass('m--hide')){
-                $('#lotteryEditionsParent').addClass('m--hide');
+
+        $('input[name=drawLotteriesCheckbox]').change(function () {
+            if($(this).prop('checked')){
+                getDrawLotteries();
             }
         });
 
-        function getLotteryTypes(value) {
+        $('input[name=instantLotteriesCheckbox]').change(function () {
+            if($(this).prop('checked')){
+                getInstantLotteries();
+            }
+        });
 
-            var url = '/reportGetLotteryTypes';
+        function getDrawLotteries() {
 
             $.ajax
             ({
-                type: "POST",
-                url: url,
-                data: {
-                    has_edition: value
-                },
+                type: "GET",
+                url: '/reportGetDrawLotteries',
                 cache: false,
                 success: function (data) {
-                    $('#lotteryTypes').html(data);
+                    $('#drawLotteries').html(data);
                     $('.m_selectpicker').selectpicker('refresh');
                     $('#lotteryTypesParent').removeClass('m--hide');
                 }
             });
         }
 
-        function getLotteryEditions(el) {
-
-            var url = '/reportGetLotteryEditions';
+        function getInstantLotteries() {
 
             $.ajax
             ({
-                type: "POST",
-                url: url,
+                type: "GET",
+                url: '/reportGetInstantLotteries',
+                cache: false,
+                success: function (data) {
+                    $('#instantLotteries').html(data);
+                    $('.m_selectpicker').selectpicker('refresh');
+                    $('#lotteryTypesParent').removeClass('m--hide');
+                }
+            });
+        }
+
+        function getDraws(el) {
+
+            $.ajax
+            ({
+                type: "GET",
+                url: '/reportGetDraws',
                 data: {
-                    ids: $('#lotteryTypeSelect').val()
+                    ids: $('#drawLotterySelect').val()
                 },
                 cache: false,
                 success: function (data) {
-                    $('#lotteryEditions').html(data);
+                    $('#draws').html(data);
                     $('.m_selectpicker').selectpicker('refresh');
                     $('#lotteryEditionsParent').removeClass('m--hide');
                 }
