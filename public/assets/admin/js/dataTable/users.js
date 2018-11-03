@@ -11,7 +11,11 @@ var DatatableRecordSelectionDemo = function() {
             pageSize: 10,
             serverPaging: !0,
             serverFiltering: !0,
-            serverSorting: !0
+            serverSorting: !0,
+            saveState: {
+                cookie: false,
+                webstorage: false
+            }
         },
         layout: {
             theme: "default",
@@ -30,15 +34,10 @@ var DatatableRecordSelectionDemo = function() {
                 }
             }
         },
-        columns: [
-        {
-            field: "id",
-            title: "ID",
-            width: 40,
-        }, {
+        columns: [{
             field: "name",
             title: "ФИО",
-            width: 100,
+            width: 200,
             attr: {
                 nowrap: "nowrap"
             },
@@ -53,12 +52,9 @@ var DatatableRecordSelectionDemo = function() {
                 nowrap: "nowrap"
             }
         }, {
-            field: "login",
-            title: "Логин"
-        }, 
-        {
             field: "active",
             title: "Статус",
+            width: 80,
             template: function(t) {
                 var e = {
                     0: {
@@ -74,14 +70,37 @@ var DatatableRecordSelectionDemo = function() {
             }
         }, {
             field: "type",
-            title: "Тип"
+            title: "Должность",
+            width: 100
         }, {
             field: "actions",
             width: 110,
             title: "Actions",
             sortable: !1,
             textAlign: "right"
-        }]
+        }],
+        translate: {
+            records: {
+                processing: 'Подождите...',
+                noRecords: 'Нет данных'
+            },
+            toolbar: {
+                pagination: {
+                    items: {
+                        default: {
+                            first: 'Начало',
+                            prev: 'Пред.',
+                            next: 'След.',
+                            last: 'Конец',
+                            more: 'Больше страниц',
+                            input: 'Номер страницы',
+                            select: 'Выберите количество данных'
+                        },
+                        info: '{{start}} - {{end}} / {{total}}'
+                    }
+                }
+            }
+        }
     };
     return {
         init: function() {

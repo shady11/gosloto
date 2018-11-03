@@ -50,6 +50,11 @@ class Draw extends Model
         return DB::table($this->getLottery->getNameSlugged().'_'.$this->draw_number)->where('supervisor_id', $id)->orderBy('ticket_number', 'asc')->get();
     }
 
+    public function getTotalSellerTickets($id)
+    {
+        return DB::table($this->getLottery->getNameSlugged().'_'.$this->draw_number)->where('seller_id', $id)->orderBy('ticket_number', 'asc')->get();
+    }
+
     public function getSharedTicketsToSupervisor()
     {
         return DB::table($this->getLottery->getNameSlugged().'_'.$this->draw_number)->where('status', '>', '0')->whereNotNull('supervisor_id')->get();
@@ -70,9 +75,9 @@ class Draw extends Model
         return DB::table($this->getLottery->getNameSlugged().'_'.$this->draw_number)->where('supervisor_id', $id)->where('status', 3)->whereNotNull('sold_at')->get();
     }
 
-    public function getSoldTicketsBySeller()
+    public function getSoldTicketsBySeller($id)
     {
-        return DB::table($this->getLottery->getNameSlugged().'_'.$this->draw_number)->where('status', 3)->whereNotNull('sold_at')->get();
+        return DB::table($this->getLottery->getNameSlugged().'_'.$this->draw_number)->where('seller_id', $id)->where('status', 3)->whereNotNull('sold_at')->get();
     }
 
     public function getReturnedTickets()

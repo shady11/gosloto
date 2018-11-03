@@ -12,13 +12,13 @@
 			<div class="m-portlet__head-caption">
 				<div class="m-portlet__head-title">
 					<h3 class="m-portlet__head-text">
-						Типы пользователей
+						Должности
 					</h3>
 				</div>
 			</div>
 			<div class="m-portlet__head-tools">
 				<a href="{{route('userTypes.create')}}" class="btn btn-info m--margin-left-10">
-					Добавить тип
+					Добавить
 				</a>
 			</div>
 		</div>

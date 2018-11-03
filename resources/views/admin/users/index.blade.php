@@ -12,18 +12,13 @@
 			<div class="m-portlet__head-caption">
 				<div class="m-portlet__head-title">
 					<h3 class="m-portlet__head-text">
-						Список пользователей
+						Список сотрудников
 					</h3>
 				</div>
 			</div>
 			<div class="m-portlet__head-tools">
-				@if(auth()->user()->isAdmin())
-					<a href="{{route('userTypes.create')}}" class="btn btn-info m--margin-left-10">
-						Добавить тип
-					</a>
-				@endif
 				<a href="{{route('users.create')}}" class="btn btn-success m--margin-left-10">
-					Добавить пользователя
+					Добавить
 				</a>
 			</div>
 		</div>

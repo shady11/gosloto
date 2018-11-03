@@ -15,17 +15,17 @@
 				<a  href="javascript:;" class="m-menu__link m-menu__toggle">
 					<i class="m-menu__link-icon jam jam-users"></i>
 					<span class="m-menu__link-text">
-						Пользователи
+						Сотрудники
 					</span>
 					<i class="m-menu__ver-arrow jam jam-chevron-right"></i>
 				</a>
-				<div class="m-menu__submenu ">
+				<div class="m-menu__submenu">
 					<span class="m-menu__arrow"></span>
 					<ul class="m-menu__subnav">
 						<li class="m-menu__item  m-menu__item--parent" aria-haspopup="true" >
 							<span class="m-menu__link">
 								<span class="m-menu__link-text">
-									Пользователи
+									Сотрудники
 								</span>
 							</span>
 						</li>
@@ -35,7 +35,7 @@
 									<span></span>
 								</i>
 								<span class="m-menu__link-text">
-									Список пользователей
+									Список сотрудников
 								</span>
 							</a>
 						</li>
@@ -46,7 +46,7 @@
 										<span></span>
 									</i>
 									<span class="m-menu__link-text">
-									Типы пользователей
+									Должности
 								</span>
 								</a>
 							</li>
@@ -54,57 +54,46 @@
 					</ul>
 				</div>
 			</li>
-			<li class="m-menu__item" aria-haspopup="true">
-				<a  href="{{route('lottery.index')}}" class="m-menu__link">
+			<li class="m-menu__item  m-menu__item--submenu" aria-haspopup="true"  m-menu-submenu-toggle="hover">
+				<a  href="javascript:;" class="m-menu__link m-menu__toggle">
 					<i class="m-menu__link-icon jam jam-ticket"></i>
 					<span class="m-menu__link-text">
 						Лотерея
 					</span>
+					<i class="m-menu__ver-arrow jam jam-chevron-right"></i>
 				</a>
-				{{--<div class="m-menu__submenu ">--}}
-					{{--<span class="m-menu__arrow"></span>--}}
-					{{--<ul class="m-menu__subnav">--}}
-						{{--<li class="m-menu__item  m-menu__item--parent" aria-haspopup="true" >--}}
-							{{--<span class="m-menu__link">--}}
-								{{--<span class="m-menu__link-text">--}}
-									{{--Лотерея--}}
-								{{--</span>--}}
-							{{--</span>--}}
-						{{--</li>--}}
-						{{--@if((auth()->user()->isAdmin()) || (auth()->user()->isStock()))--}}
-							{{--<li class="m-menu__item " aria-haspopup="true" >--}}
-								{{--<a  href="{{route('lotteryTypes.index')}}" class="m-menu__link ">--}}
-									{{--<i class="m-menu__link-bullet m-menu__link-bullet--dot">--}}
-										{{--<span></span>--}}
-									{{--</i>--}}
-									{{--<span class="m-menu__link-text">--}}
-										{{--Виды лотерей--}}
-									{{--</span>--}}
-								{{--</a>--}}
-							{{--</li>--}}
-						{{--@endif--}}
-						{{--<li class="m-menu__item " aria-haspopup="true"  m-menu-link-redirect="1">--}}
-							{{--<a  href="{{route('lotteryEditions.index')}}" class="m-menu__link ">--}}
-								{{--<i class="m-menu__link-bullet m-menu__link-bullet--dot">--}}
-									{{--<span></span>--}}
-								{{--</i>--}}
-								{{--<span class="m-menu__link-text">--}}
-									{{--Тиражные лотереи--}}
-								{{--</span>--}}
-							{{--</a>--}}
-						{{--</li>--}}
-						{{--<li class="m-menu__item " aria-haspopup="true"  m-menu-link-redirect="1">--}}
-							{{--<a  href="{{route('lotteries.index')}}" class="m-menu__link ">--}}
-								{{--<i class="m-menu__link-bullet m-menu__link-bullet--dot">--}}
-									{{--<span></span>--}}
-								{{--</i>--}}
-								{{--<span class="m-menu__link-text">--}}
-									{{--Мгновенные лотереи--}}
-								{{--</span>--}}
-							{{--</a>--}}
-						{{--</li>--}}
-					{{--</ul>--}}
-				{{--</div>--}}
+				<div class="m-menu__submenu">
+					<span class="m-menu__arrow"></span>
+					<ul class="m-menu__subnav">
+						<li class="m-menu__item  m-menu__item--parent" aria-haspopup="true" >
+							<span class="m-menu__link">
+								<span class="m-menu__link-text">
+									Лотерея
+								</span>
+							</span>
+						</li>
+						<li class="m-menu__item " aria-haspopup="true" >
+							<a  href="{{route('drawLottery.index')}}" class="m-menu__link ">
+								<i class="m-menu__link-bullet m-menu__link-bullet--dot">
+									<span></span>
+								</i>
+								<span class="m-menu__link-text">
+									Тиражные лотереи
+								</span>
+							</a>
+						</li>
+						<li class="m-menu__item " aria-haspopup="true"  m-menu-link-redirect="1">
+							<a  href="{{route('instantLottery.index')}}" class="m-menu__link ">
+								<i class="m-menu__link-bullet m-menu__link-bullet--dot">
+									<span></span>
+								</i>
+								<span class="m-menu__link-text">
+								Мгновенные лотереи
+							</span>
+							</a>
+						</li>
+					</ul>
+				</div>
 			</li>
 			@if((auth()->user()->isAdmin()) || (auth()->user()->isStock()))
 				<li class="m-menu__item  m-menu__item--submenu" aria-haspopup="true"  m-menu-submenu-toggle="hover">

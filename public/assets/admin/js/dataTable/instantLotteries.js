@@ -14,7 +14,11 @@ var DatatableInstantLotteries = {
                 pageSize: 10,
                 serverPaging: !0,
                 serverFiltering: !0,
-                serverSorting: !0
+                serverSorting: !0,
+                saveState: {
+                    cookie: false,
+                    webstorage: false
+                }
             },
             layout: {
                 scroll: !1,

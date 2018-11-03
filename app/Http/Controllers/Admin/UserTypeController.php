@@ -33,7 +33,7 @@ class UserTypeController extends Controller
         if($sort){
             $resultPaginated = UserType::orderBy($sort['field'], $sort['sort'])->paginate($perpage);
         } else {
-            $resultPaginated = UserType::orderBy('id', 'desc')->paginate($perpage);
+            $resultPaginated = UserType::orderBy('name', 'asc')->paginate($perpage);
         }
 
         foreach ($resultPaginated as $row) {

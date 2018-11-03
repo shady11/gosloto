@@ -11,7 +11,10 @@ use Maatwebsite\Excel\Facades\Excel;
 
 class InstantLotteryController extends Controller
 {
-    public function index() {}
+    public function index()
+    {
+        return view('admin.instantLottery.index');
+    }
 
     public function create()
     {

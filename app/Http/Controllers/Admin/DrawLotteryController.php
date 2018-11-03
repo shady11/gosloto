@@ -12,7 +12,10 @@ use Maatwebsite\Excel\Facades\Excel;
 
 class DrawLotteryController extends Controller
 {
-    public function index() {}
+    public function index()
+    {
+        return view('admin.drawLottery.index');
+    }
 
     public function create()
     {

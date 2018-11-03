@@ -77,7 +77,7 @@ class DrawController extends Controller
                 $to = $request->tickets_count;
             }
 
-            for($i = $from; $i < $to; $i++){
+            for($i = $from; $i <= $to; $i++){
                 DB::table($drawLottery->getNameSlugged().'_'.$request->draw_number)->insert([
                     'ticket_number' => str_pad($i, $length, "0", STR_PAD_LEFT),
                     'status' => 0,

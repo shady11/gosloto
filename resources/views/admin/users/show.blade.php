@@ -39,7 +39,7 @@
 				</div>
 				<div class="m-widget13__item">
 					<span class="m-widget13__desc m--align-right">
-						Логин:
+						Логин
 					</span>
 					<span class="m-widget13__text m-widget13__text-bolder">
 						{{$user->login}}
@@ -47,7 +47,7 @@
 				</div>
 				<div class="m-widget13__item">
 					<span class="m-widget13__desc m--align-right">
-						Email:
+						Email
 					</span>
 					<span class="m-widget13__text m-widget13__text-bolder">
 						{{$user->email}}
@@ -55,7 +55,7 @@
 				</div>
 				<div class="m-widget13__item">
 					<span class="m-widget13__desc m--align-right">
-						Тип пользователя:
+						Должность
 					</span>
 					<span class="m-widget13__text m-widget13__text-bolder">
 						{{$user->getUserType()->name}}
@@ -63,7 +63,7 @@
 				</div>
 				<div class="m-widget13__item">
 					<span class="m-widget13__desc m--align-right">
-						Статус:
+						Статус
 					</span>
 					<span class="m-widget13__text m-widget13__text-bolder">
 						{!!$user->getStatus()!!}

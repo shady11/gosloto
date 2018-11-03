@@ -14,7 +14,7 @@ use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
 use Laravel\Passport\HasApiTokens;
 use Spatie\Activitylog\Traits\LogsActivity;
-use Nicolaslopezj\Searchable\SearchableTrait;
+use \Nicolaslopezj\Searchable\SearchableTrait as SearchableTrait;
 
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Pagination\Paginator;
@@ -22,7 +22,8 @@ use Illuminate\Pagination\Paginator;
 
 class User extends Model implements AuthenticatableContract, CanResetPasswordContract
 {
-    use Authenticatable, CanResetPassword, LogsActivity, HasApiTokens, SearchableTrait;
+    use Authenticatable, CanResetPassword, LogsActivity, HasApiTokens;
+//    use SearchableTrait;
 
     protected $connection = 'mysql';
 
@@ -69,7 +70,7 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
             $hasLotteriesWithEditions = DB::table('lottery_edition_'.$row->lottery_type.'_'.$row->number)->where('user', $this->id)->get();
             $row->user_tickets_count = count($hasLotteriesWithEditions);
             if($hasLotteriesWithEditions->isNotEmpty()){
-
+                $editionsResult[] = $row;
             }
         }
         return $editionsResult;
@@ -157,6 +158,52 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
             }
         }
         return $this->customPaginate($drawsResult, $perPage);
+    }
+
+//    Seller
+    public function getSellerDrawLotteries()
+    {
+        $lotteriesResult = $drawsResult = array();
+        $lotteries = DrawLottery::orderBy('id', 'desc')->get();
+        foreach ($lotteries as $key => $row){
+            $draws = Draw::where('lottery_id', $row->id)->get();
+            foreach ($draws as $draw){
+                $drawTickets = DB::table($row->getNameSlugged().'_'.$draw->draw_number)->where('seller_id', $this->id)->get();
+                if($drawTickets->isNotEmpty()){
+                    $drawsResult[] = $draw;
+                }
+            }
+            if($drawsResult){
+                $lotteriesResult[] = $row;
+            }
+        }
+        return $lotteriesResult;
+    }
+
+    public function getSellerDraws($drawLottery)
+    {
+        $drawsResult = array();
+        $draws = Draw::where('lottery_id', $drawLottery)->get();
+        foreach ($draws as $draw){
+            $drawTickets = DB::table($draw->getLottery->getNameSlugged().'_'.$draw->draw_number)->where('seller_id', $this->id)->get();
+            if($drawTickets->isNotEmpty()){
+                $drawsResult[] = $draw;
+            }
+        }
+        return $drawsResult;
+    }
+
+    public function getSellerInstantLotteries()
+    {
+        $lotteriesResult = array();
+        $lotteries = InstantLottery::orderBy('id', 'desc')->get();
+        foreach ($lotteries as $key => $row) {
+            $sharedTickets = SharedTicket::where('seller_id', $this->id)->where('lottery_id', $row->id)->whereNotNull('shared_to_seller_at')->first();
+            if($sharedTickets){
+                $lotteriesResult[] = $row;
+            }
+        }
+        return $lotteriesResult;
     }
 
 //    Tickets

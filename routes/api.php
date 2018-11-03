@@ -22,6 +22,18 @@ Route::middleware('auth:api')->group(function () {
 
     Route::get('user', 'Api\UserController@user');
 
+    Route::get('getDrawLotteries', 'Api\DrawLotteryController@getDrawLotteries');
+    Route::get('getDraws', 'Api\DrawLotteryController@getDraws');
+    Route::get('getDrawTickets', 'Api\DrawLotteryController@getDrawTickets');
+    Route::post('setDrawTicket', 'Api\DrawLotteryController@setDrawTicket');
+    Route::post('setDrawTickets', 'Api\DrawLotteryController@setDrawTickets');
+
+    Route::get('getInstantLotteries', 'Api\InstantLotteryController@getInstantLotteries');
+    Route::get('getSharedTickets', 'Api\InstantLotteryController@getSharedTickets');
+
+
+
+    //Old
     Route::get('getActiveLotteriesWithEdition', 'Api\LotteryController@getActiveLotteriesWithEdition');
     Route::get('getActiveLotteries', 'Api\LotteryController@getActiveLotteries');
     
@@ -33,4 +45,6 @@ Route::middleware('auth:api')->group(function () {
     Route::post('setTicket', 'Api\LotteryController@setTicket');
 
     Route::get('lotteryTypes', 'Api\LotteryTypeController@lotteryTypes');
+
+
 });

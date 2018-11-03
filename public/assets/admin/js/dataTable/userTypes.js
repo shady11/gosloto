@@ -13,7 +13,11 @@ var DatatableRemoteAjaxDemo = {
                 pageSize: 10,
                 serverPaging: !0,
                 serverFiltering: !0,
-                serverSorting: !0
+                serverSorting: !0,
+                saveState: {
+                    cookie: false,
+                    webstorage: false
+                }
             },
             layout: {
                 scroll: !1,
@@ -32,10 +36,6 @@ var DatatableRemoteAjaxDemo = {
                 input: $("#generalSearch")
             },
             columns: [{
-                field: "id",
-                title: "ID",
-                width: 50
-            }, {
                 field: "name",
                 title: "Название",
                 attr: {
@@ -47,7 +47,29 @@ var DatatableRemoteAjaxDemo = {
                 sortable: !1,
                 textAlign: "right",
                 overflow: "visible"
-            }]
+            }],
+            translate: {
+                records: {
+                    processing: 'Подождите...',
+                    noRecords: 'Нет данных'
+                },
+                toolbar: {
+                    pagination: {
+                        items: {
+                            default: {
+                                first: 'Начало',
+                                prev: 'Пред.',
+                                next: 'След.',
+                                last: 'Конец',
+                                more: 'Больше страниц',
+                                input: 'Номер страницы',
+                                select: 'Выберите количество данных'
+                            },
+                            info: '{{start}} - {{end}} / {{total}}'
+                        }
+                    }
+                }
+            }
         })
     }
 };

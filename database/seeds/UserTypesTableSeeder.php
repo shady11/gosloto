@@ -40,5 +40,13 @@ class UserTypesTableSeeder extends Seeder
             'name' => 'Касса',
             'slug' => 'cash',
         ]);
+        UserType::create([
+            'name' => 'Директор',
+            'slug' => 'director',
+        ]);
+        UserType::create([
+            'name' => 'Прочее',
+            'slug' => 'other',
+        ]);
     }
 }
